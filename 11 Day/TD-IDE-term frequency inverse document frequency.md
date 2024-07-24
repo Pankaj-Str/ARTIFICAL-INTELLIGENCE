@@ -1,5 +1,3 @@
-z# TD-IDE-term frequency inverse document frequency 
-
 ### Understanding Term Frequency-Inverse Document Frequency (TF-IDF)
 
 Term Frequency-Inverse Document Frequency, or TF-IDF, is a numerical statistic used to indicate how important a word is to a document in a collection or corpus. It is often used in text mining and information retrieval to measure relevance rather than just frequency. While simple counts of words might give too much weight to terms that appear more frequently, TF-IDF compensates by giving more importance to words that are rare in the entire document corpus but appear in good numbers in few documents.
