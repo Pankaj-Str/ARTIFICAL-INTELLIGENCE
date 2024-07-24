@@ -8,14 +8,14 @@ Loss functions, or cost functions, are used to measure the discrepancies between
 
 - **Mean Squared Error (MSE)**: Commonly used in regression tasks, MSE measures the average squared difference between the estimated values and the actual value. It's useful because squaring the errors penalizes larger errors more than smaller ones, which can be desirable in many real-world problems.
   
-  **Equation**: 
+
  ![image](https://github.com/user-attachments/assets/1b24e1ae-da8e-420d-89ca-e96349bd37be)
 
 
 
 - **Cross-Entropy**: Often used in classification tasks, cross-entropy measures the performance of a classification model whose output is a probability value between 0 and 1. Cross-entropy loss increases as the predicted probability diverges from the actual label.
   
-  **Equation**:
+ 
 ![image](https://github.com/user-attachments/assets/4467783c-e2c9-4353-91fa-0e74b2ba07b9)
 
 
