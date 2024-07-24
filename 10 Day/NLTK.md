@@ -1,4 +1,4 @@
-# simple NLTK ( stemming/ lemmatization / regex / stop words, corpus, unigram, bigram, trigram )
+# Simple NLTK ( stemming/ lemmatization / regex / stop words, corpus, unigram, bigram, trigram )
 ### Simple NLTK Tutorial: Core Concepts and Practical Examples
 
 The Natural Language Toolkit (NLTK) is a powerful Python library designed for working with human language data. It includes easy-to-use interfaces to over 50 corpora and lexical resources such as WordNet, along with a suite of text processing libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning. This tutorial will cover fundamental concepts like stemming, lemmatization, regular expressions, stop words, corpora, and n-grams (unigram, bigram, trigram).
