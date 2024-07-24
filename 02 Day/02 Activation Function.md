@@ -16,32 +16,38 @@ Activation functions are mathematical equations that determine the output of a n
 #### II. Types of Activation Functions
 
 ##### A. Linear or Identity Activation Function
-- **Formula**: \( f(x) = x \)
+- ![image](https://github.com/user-attachments/assets/13f526ff-6070-447f-8754-833506b19519)
+
 - **Characteristics**: It does not transform input data. It is not commonly used except when the model needs to output values that are not bound between any limits (e.g., regression problems).
 - **Example**: Predicting house prices based on area, where the relationship might be directly proportional.
 
 ##### B. Sigmoid or Logistic Activation Function
-- **Formula**: \( f(x) = \frac{1}{1 + e^{-x}} \)
+- ![image](https://github.com/user-attachments/assets/03b3cbc0-9243-49e4-aba2-b96ec8a411ed)
+
 - **Characteristics**: It maps the input values between 0 and 1, making it a good choice for binary classification problems.
 - **Example**: Binary classification like email spam detection, where each email is either spam (1) or not spam (0).
 
 ##### C. Hyperbolic Tangent (tanh)
-- **Formula**: \( f(x) = \tanh(x) = \frac{2}{1 + e^{-2x}} - 1 \)
+- ![image](https://github.com/user-attachments/assets/00ca57be-09fc-409e-90ae-e943d6e63fb0)
+
 - **Characteristics**: Outputs values ranging from -1 to 1. It is zero-centered, making it better than sigmoid in some cases because it improves the efficiency of gradient descent.
 - **Example**: Used in tasks that require modeling of data where both positive and negative changes need to be distinctly identified, such as sentiment analysis from text data.
 
 ##### D. ReLU (Rectified Linear Unit)
-- **Formula**: \( f(x) = \max(0, x) \)
+- ![image](https://github.com/user-attachments/assets/ead60228-b497-4010-93c0-6b3e23108aac)
+
 - **Characteristics**: It allows only positive values to pass through, effectively turning off negative values. ReLU is widely used due to its computational simplicity and convergence speed.
 - **Example**: Widely used in convolutional neural networks (CNNs) for tasks like image classification and object detection.
 
 ##### E. Leaky ReLU
-- **Formula**: \( f(x) = \max(0.01x, x) \)
+- ![image](https://github.com/user-attachments/assets/976fe10e-aba4-4a5a-9254-58ed26e79a69)
+
 - **Characteristics**: A variant of ReLU intended to solve the problem of "dying neurons" (neurons that stop learning completely in the case of ReLU).
 - **Example**: Useful in deeper networks that suffer from the dying neuron problem, helping to keep the gradient flow alive through the network.
 
 ##### F. Softmax
-- **Formula**: \( f(x_i) = \frac{e^{x_i}}{\sum_{k} e^{x_k}} \)
+- ![image](https://github.com/user-attachments/assets/a6472a45-83c5-48bc-be08-31956c775e17)
+
 - **Characteristics**: The softmax function is a type of squashing function that normalizes its inputs into a probability distribution consisting of K probabilities proportional to the exponentials of the input numbers.
 - **Example**: Multi-class classification problems, like recognizing digits from 0 to 9 in hand-written digit classification.
 
