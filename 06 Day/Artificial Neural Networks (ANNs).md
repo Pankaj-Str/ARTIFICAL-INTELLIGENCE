@@ -59,23 +59,22 @@ Here are some common activation functions:
 
 #### **Sigmoid**
 The sigmoid function maps any input value to an output value between 0 and 1. It's particularly useful for models where we need to predict probabilities, as the outputs can be interpreted as probabilities. It has an S-shaped curve.
-- **Equation**: \( \sigma(x) = \frac{1}{1 + e^{-x}} \)
-- **Use Case**: Often used in binary classification tasks in the output layer.
+![image](https://github.com/user-attachments/assets/93bfc00d-d60a-4827-8922-d44d4280e3c9)
+
 
 #### **ReLU (Rectified Linear Unit)**
 ReLU is a piece-wise linear function that outputs the input directly if it is positive; otherwise, it outputs zero. It is one of the most widely used activation functions in deep learning, primarily because it is simple and reduces the likelihood of the vanishing gradient problem.
-- **Equation**: \( f(x) = max(0, x) \)
-- **Use Case**: Commonly used in hidden layers to help speed up training and convergence.
+
+![image](https://github.com/user-attachments/assets/c0604e2b-9150-4f33-bd6f-1f17e87a142e)
+
 
 #### **Tanh (Hyperbolic Tangent)**
 The tanh function is similar to the sigmoid but maps input values to a range between -1 and 1. It is zero-centered, making it easier in some cases for the model to learn.
-- **Equation**: \( \tanh(x) = \frac{2}{1 + e^{-2x}} - 1 \)
+- ![image](https://github.com/user-attachments/assets/6d4053bd-dd1b-4134-a6a0-1ad4ce9a4d8f)
 - **Use Case**: Often used in hidden layers, particularly when data needs to be normalized around zero.
 
 **Illustrations of Activation Functions:**
 Here’s how these functions look graphically, which might help visualize how they modulate the input:
-
-![Graphs of Sigmoid, ReLU, and Tanh functions](https://via.placeholder.com/600x400.png?text=Graphs+Placeholder) 
 
 ### 2.3 The Architecture of ANNs
 
@@ -94,8 +93,6 @@ The architecture of a typical Artificial Neural Network (ANN) is composed of thr
 - **Role**: The structure and function of the output layer vary depending on the specific task (e.g., classification, regression). For instance, in a classification task, the output layer might use a softmax activation function to distribute the outputs as a probability distribution across predicted classes.
 
 **Illustration of ANN Architecture:**
-
-![Diagram of a simple ANN with one hidden layer](https://via.placeholder.com/600x400.png?text=Diagram+Placeholder)
 
 This structure allows ANNs to tackle problems from simple linear regression to complex image recognition tasks. Each layer's output serves as the input to the next layer, creating a chain of computations that translate raw data into actionable insights.
 
