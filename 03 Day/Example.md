@@ -1,6 +1,6 @@
-### Mean Squared Error (MSE), 
-### Mean Absolute Error (MAE), 
-### Cross-Entropy Loss, and Hinge Loss. 
+### 1. Mean Squared Error (MSE), 
+### 2. Mean Absolute Error (MAE), 
+### 3. Cross-Entropy Loss, and Hinge Loss. 
 
 ### A. Mean Squared Error (MSE)
 **Description:** MSE measures the average squared difference between actual and predicted values. This squaring implies that larger errors are penalized more heavily, which can be particularly useful in regression scenarios where outliers are undesirable.
