@@ -1,6 +1,4 @@
 # GLOVE 
-Let's create a detailed, step-by-step guide on how to implement and use word embeddings using the Python library `gensim`, focusing specifically on the Word2Vec model. We'll go from setting up your environment to training and using the model with practical examples.
-
 ### Step 1: Setting Up Your Environment
 
 To start, you'll need to have Python installed on your machine along with the libraries `gensim` for the Word2Vec implementation and `nltk` for text processing. If you haven't installed these yet, you can do so using pip:
