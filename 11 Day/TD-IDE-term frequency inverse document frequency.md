@@ -1,4 +1,4 @@
-# TD-IDE-term frequency inverse document frequency 
+z# TD-IDE-term frequency inverse document frequency 
 
 ### Understanding Term Frequency-Inverse Document Frequency (TF-IDF)
 
@@ -9,17 +9,20 @@ Term Frequency-Inverse Document Frequency, or TF-IDF, is a numerical statistic u
 #### **1.1 Term Frequency (TF)**
 Term Frequency measures how frequently a term occurs in a document. Since every document is different in length, it is possible that a term would appear much more times in long documents than shorter ones. Thus, the term frequency is often divided by the document length (aka. the total number of terms in the document) as a way of normalization:
 
-\[ TF(t) = \left( \frac{\text{Number of times term } t \text{ appears in a document}}{\text{Total number of terms in the document}} \right) \]
+![image](https://github.com/user-attachments/assets/21f81de9-5ec6-4091-9c31-43477064aa26)
+
 
 #### **1.2 Inverse Document Frequency (IDF)**
 Inverse Document Frequency measures how important a term is. While computing TF, all terms are considered equally important. However, certain terms, like "is", "of", and "that", may appear a lot of times but have little importance. Thus we need to weigh down the frequent terms while scale up the rare ones, by computing the following:
 
-\[ IDF(t) = \log \left(\frac{\text{Total number of documents}}{\text{Number of documents with term } t \text{ in it}}\right) \]
+![image](https://github.com/user-attachments/assets/34fd4b94-9218-44be-b184-3c45154a327e)
+
 
 ### 2. **TF-IDF Calculation**
 The TF-IDF value increases proportionally to the number of times a word appears in the document and is offset by the number of documents in the corpus that contain the word, which helps to adjust for the fact that some words appear more frequently in general. TF-IDF is calculated as:
 
-\[ \text{TF-IDF}(t) = TF(t) \times IDF(t) \]
+![image](https://github.com/user-attachments/assets/52465953-b62f-48ef-af9f-ba4feec77f4b)
+
 
 ### 3. **Python Example using Scikit-Learn**
 
