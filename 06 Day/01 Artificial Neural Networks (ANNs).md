@@ -96,3 +96,105 @@ The architecture of a typical Artificial Neural Network (ANN) is composed of thr
 
 This structure allows ANNs to tackle problems from simple linear regression to complex image recognition tasks. Each layer's output serves as the input to the next layer, creating a chain of computations that translate raw data into actionable insights.
 
+### 3. Training Neural Networks
+
+Training neural networks involves several critical steps, from preparing the data to adjusting the network’s internal parameters (weights and biases) through learning algorithms like backpropagation and gradient descent. Let's explore these steps with Python examples to illustrate the concepts.
+
+#### 3.1 Data Preparation
+
+**Importance**: Data preparation is crucial because the quality and format of your data directly influence how well your neural network can learn and perform. Key steps in data preparation include:
+
+1. **Normalization**: This involves scaling input data to a standard range, typically 0 to 1 or -1 to 1. This is important because it ensures that no single feature dominates the others in terms of scale, leading to faster and more stable training.
+   
+2. **Splitting Data**: Dividing the dataset into training and testing sets helps in validating the model effectively. The training set is used to train the model, while the testing set is used to evaluate its performance to ensure that the model generalizes well to new, unseen data.
+
+**Example with Python (Using sklearn and numpy)**:
+
+```python
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
+
+# Load a simple dataset
+data = load_iris()
+X = data.data
+y = data.target
+
+# Normalize the data
+scaler = MinMaxScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+```
+
+#### 3.2 The Concept of Weights and Bias
+
+**Overview**: Weights and biases are the learnable parameters of a neural network. During training, these parameters are adjusted to minimize the prediction error.
+
+- **Weights** determine the influence of each input feature on the output.
+- **Bias** allows the model to shift the activation function to better fit the data.
+
+**Learning Process**: The goal is to adjust weights and biases so that the error between the predicted output and the actual output is minimized. This process involves calculating the loss (or error) and using optimization algorithms to find the optimal values.
+
+**Example**:
+
+Let's assume a simple model with one weight and one bias:
+
+```python
+# Initialize weight and bias
+weight = np.random.normal()
+bias = np.random.normal()
+
+# Simple prediction function
+def predict(x):
+    return weight * x + bias
+
+# Example of prediction
+input_feature = 0.5
+predicted_output = predict(input_feature)
+print(f"Predicted Output: {predicted_output}")
+```
+
+#### 3.3 Backpropagation and Gradient Descent
+
+**Backpropagation**:
+- It's the process used in neural networks to minimize the loss by adjusting the weights and biases in reverse from the output back to the input layer.
+- It calculates the gradient (rate of change) of the loss function with respect to each weight and bias by the chain rule of calculus.
+
+**Gradient Descent**:
+- An optimization algorithm used to minimize the loss function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient.
+- In simple terms, it updates the weights and biases in the direction that decreases the loss the most.
+
+**Python Example (Using a very simple model)**:
+
+```python
+def loss(y_pred, y_true):
+    return np.mean((y_pred - y_true) ** 2)  # Mean squared error
+
+def update_weights(x, y, epochs, lr):
+    weight = np.random.normal()
+    bias = np.random.normal()
+
+    for epoch in range(epochs):
+        y_pred = x * weight + bias
+        dW = -2 * np.mean(x * (y - y_pred))  # Derivative of loss w.r.t. weight
+        dB = -2 * np.mean(y - y_pred)        # Derivative of loss w.r.t. bias
+        
+        # Update weights and biases
+        weight -= lr * dW
+        bias -= lr * dB
+        
+        if epoch % 10 == 0:
+            print(f"Epoch {epoch}, Loss: {loss(y_pred, y)}")
+
+    return weight, bias
+
+# Example training process
+x_train = np.array([1, 2, 3, 4, 5])
+y_train = np.array([2, 4, 6, 8, 10])  # Example simple linear relation y = 2x
+weight, bias = update_weights(x_train, y_train, epochs=50, lr=0.01)
+```
+
+In this example, the `update_weights` function adjusts the weight and bias to minimize the loss function (`loss`) which is the mean squared error in this case. Over multiple epochs, the weight and bias are refined to approximate the underlying relationship in the training data (`y = 2x` in this example).
