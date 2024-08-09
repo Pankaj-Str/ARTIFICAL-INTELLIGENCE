@@ -105,3 +105,4 @@ Exploring emerging trends and the future potential of AI technologies.
 The various modules in AI provide a structured approach to understanding and implementing AI technologies. Each module has specific tools, techniques, and applications, making AI a versatile and powerful field. As AI continues to evolve, understanding these modules will be crucial for anyone looking to leverage AI in their professional or research endeavors.
 
 This tutorial provides a comprehensive overview to help beginners and advanced learners alike understand the breadth and depth of AI. Whether in academic settings or industry applications, the knowledge of AI modules is foundational for navigating the future of technology.
+
