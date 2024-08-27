@@ -17,7 +17,7 @@ Where
 
 
 Where:
-
+- σ(x) is the Sigmoid function.
 - 𝑥 is the input value
 - 𝑒 is the base of the natural logarithm (approximately equal to 2.718)
 
