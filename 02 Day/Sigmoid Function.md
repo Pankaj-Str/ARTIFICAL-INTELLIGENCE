@@ -5,15 +5,17 @@ Certainly! Here's a simple, step-by-step explanation of how to create and use a 
 ### What is the Sigmoid Function?
 The Sigmoid function is a mathematical function that converts any input value into a value between 0 and 1. It's commonly used in machine learning, especially in logistic regression, to model probabilities.
 
-The Sigmoid function is defined as:
+The Sigmoid function, often used in machine learning and logistic regression, is defined as:
 
-\[
+$$
 \sigma(x) = \frac{1}{1 + e^{-x}}
-\]
+$$
 
 Where:
-- \( x \) is the input value
-- \( e \) is the base of the natural logarithm (approximately equal to 2.718)
+- \( \sigma(x) \) is the sigmoid function output.
+- \( x \) is the input value.
+- \( e \) is the base of the natural logarithm (approximately 2.718).
+
 
 ### Step-by-Step Guide to Implementing the Sigmoid Function in Python
 
