@@ -11,12 +11,13 @@ $$
 \sigma(x) = \frac{1}{1 + e^{-x}}
 $$
 
-Where:
-$$
-- \( \sigma(x) \) is the sigmoid function output.
-- \( x \) is the input value.
-- \( e \) is the base of the natural logarithm (approximately 2.718).
-$$
+Where
+
+
+- $$ \( \sigma(x) \)$$ is the sigmoid function output.
+- $$ \( x \) $$ is the input value.
+- $$ \( e \) $$ is the base of the natural logarithm (approximately 2.718).
+
 
 ### Step-by-Step Guide to Implementing the Sigmoid Function in Python
 
