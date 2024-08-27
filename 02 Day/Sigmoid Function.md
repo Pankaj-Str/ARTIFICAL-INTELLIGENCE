@@ -7,6 +7,8 @@ The Sigmoid function is a mathematical function that converts any input value in
 
 The Sigmoid function, often used in machine learning and logistic regression, is defined as:
 
+### The Sigmoid function is defined as:
+
 $$
 \sigma(x) = \frac{1}{1 + e^{-x}}
 $$
@@ -14,9 +16,10 @@ $$
 Where
 
 
-- $$ \( \sigma(x) \)$$ is the sigmoid function output.
-- $$ \( x \) $$ is the input value.
-- $$ \( e \) $$ is the base of the natural logarithm (approximately 2.718).
+Where:
+
+- 𝑥 is the input value
+- 𝑒 is the base of the natural logarithm (approximately equal to 2.718)
 
 
 ### Step-by-Step Guide to Implementing the Sigmoid Function in Python
