@@ -1,88 +1,103 @@
 # GLOVE 
-### Step 1: Setting Up Your Environment
 
-To start, you'll need to have Python installed on your machine along with the libraries `gensim` for the Word2Vec implementation and `nltk` for text processing. If you haven't installed these yet, you can do so using pip:
 
-```bash
-pip install gensim nltk
-```
+GloVe (Global Vectors for Word Representation) is technically a form of unsupervised learning because it creates embeddings by capturing global statistics of word occurrences in a text corpus without labeled data. Let’s go through an example in Python that uses pre-trained GloVe embeddings with some basic processing for unsupervised tasks, like finding word similarities.
 
-### Step 2: Importing Necessary Libraries
+In this example, we'll:
 
-Next, import the required libraries in your Python script or notebook:
+1. Load a pre-trained GloVe model.
+2. Use it to find similarities between words and analyze the relationships between them.
 
-```python
-import nltk
-from nltk.tokenize import sent_tokenize, word_tokenize
-from gensim.models import Word2Vec
-```
+### Step 1: Download Pre-trained GloVe Embeddings
 
-Make sure to download the necessary datasets from NLTK, particularly the tokenizer models:
+Pre-trained GloVe embeddings can be downloaded from [GloVe's official website](https://nlp.stanford.edu/projects/glove/). For this example, download `glove.6B.zip`, unzip it, and select `glove.6B.100d.txt` (100-dimensional embeddings).
+
+### Step 2: Load the GloVe Embeddings in Python
+
+Here's a Python script to load and work with GloVe embeddings:
 
 ```python
-nltk.download('punkt')
-```
+import numpy as np
 
-### Step 3: Preparing the Data
-
-Word2Vec requires that the input data be a list of sentences, where each sentence is a list of words. Let's prepare some data:
-
-```python
-# Sample text
-text = """
-Artificial intelligence and machine learning provide systems the ability to automatically learn and improve from experience without being explicitly programmed. Natural language processing is a sub-field of artificial intelligence that is focused on the interaction between computers and humans.
-"""
-
-# Tokenizing the text into sentences
-sentences = sent_tokenize(text)
-
-# Tokenizing each sentence into words
-tokenized_sentences = [word_tokenize(sentence.lower()) for sentence in sentences]
-```
-
-### Step 4: Training the Word2Vec Model
-
-Now, let's train the Word2Vec model on the prepared data. We'll set the size of each word vector to 100 dimensions, and the window size to 5 words around each target word.
-
-```python
-model = Word2Vec(sentences=tokenized_sentences, vector_size=100, window=5, min_count=1, workers=4)
-```
-
-### Step 5: Exploring the Model
-
-After the model is trained, you can start using it to explore word vectors and find relationships between words. For example, you can find the vector representation of a word or find similar words:
-
-```python
-# Get the vector for a word
-word_vector = model.wv['artificial']
-print("Vector for 'artificial':", word_vector)
-
-# Find similar words
-similar_words = model.wv.most_similar('artificial', topn=5)
-print("Words similar to 'artificial':", similar_words)
-```
-
-### Step 6: Saving and Loading the Model
-
-It's useful to save the model after training so you can load it later without needing to retrain it:
-
-```python
-# Save the model
-model.save("word2vec_model.bin")
+# Load GloVe embeddings
+def load_glove_model(file_path):
+    glove_model = {}
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line in f:
+            split_line = line.split()
+            word = split_line[0]
+            embedding = np.array(split_line[1:], dtype=np.float32)
+            glove_model[word] = embedding
+    print(f"Loaded {len(glove_model)} words.")
+    return glove_model
 
 # Load the model
-loaded_model = Word2Vec.load("word2vec_model.bin")
+glove_model = load_glove_model("path/to/glove.6B.100d.txt")
 ```
 
-### Step 7: Using the Model
+### Step 3: Finding Word Similarities
 
-You can use the loaded model just like the original model. For example, to find words similar to 'learning':
+Now that we have loaded the embeddings, let's create functions to calculate similarity between words and find the closest words to a given word.
+
+#### Helper Functions for Cosine Similarity
 
 ```python
-similar_to_learning = loaded_model.wv.most_similar('learning', topn=5)
-print("Words similar to 'learning':", similar_to_learning)
+from numpy.linalg import norm
+
+# Cosine similarity function
+def cosine_similarity(vec1, vec2):
+    return np.dot(vec1, vec2) / (norm(vec1) * norm(vec2))
+
+# Function to find most similar words
+def find_similar_words(word, model, top_n=5):
+    if word not in model:
+        return f"{word} not found in GloVe model!"
+    word_vec = model[word]
+    similarities = {
+        other_word: cosine_similarity(word_vec, other_vec)
+        for other_word, other_vec in model.items()
+        if other_word != word
+    }
+    # Sort by similarity and return the top N words
+    similar_words = sorted(similarities.items(), key=lambda x: x[1], reverse=True)[:top_n]
+    return similar_words
+
+# Test with an example word
+similar_words = find_similar_words("king", glove_model)
+print("Words similar to 'king':", similar_words)
 ```
 
-### Conclusion
+### Step 4: Word Analogies (e.g., King - Man + Woman ≈ Queen)
 
-This step-by-step guide introduced you to the basics of working with Word2Vec for generating word embeddings. By following these steps, you can create, explore, and utilize word embeddings for various NLP tasks such as text similarity, sentiment analysis, and more. The ability to capture semantic relationships between words makes Word2Vec a powerful tool for text analysis.
+We can also test GloVe’s ability to capture word analogies:
+
+```python
+def word_analogy(word1, word2, word3, model):
+    if word1 not in model or word2 not in model or word3 not in model:
+        return "One of the words not found in GloVe model!"
+    
+    # Calculate analogy vector: word1 - word2 + word3
+    analogy_vec = model[word1] - model[word2] + model[word3]
+    
+    # Find the word closest to the analogy vector
+    similarities = {
+        other_word: cosine_similarity(analogy_vec, other_vec)
+        for other_word, other_vec in model.items()
+    }
+    # Sort by similarity and get the closest word
+    analogy_word = sorted(similarities.items(), key=lambda x: x[1], reverse=True)[0]
+    return analogy_word
+
+# Test analogy: King - Man + Woman = ?
+result = word_analogy("king", "man", "woman", glove_model)
+print("Result of analogy 'king - man + woman':", result)
+```
+
+### Explanation of the Code
+
+- **Load GloVe Model**: Loads the GloVe word vectors into a dictionary where keys are words, and values are the vectors.
+- **Cosine Similarity**: A function that calculates similarity between vectors.
+- **Find Similar Words**: Retrieves words closest in meaning based on cosine similarity.
+- **Word Analogy**: Solves analogies by finding the word vector closest to a computed vector, representing the relationship between the given words.
+
+This setup can be used to explore word relationships and vector operations in an unsupervised manner with GloVe embeddings.
