@@ -1,4 +1,4 @@
-#### we'll create a Word2Vec model using a larger sample dataset, focusing on how to preprocess the text, train the model, and explore various Word2Vec functionalities.
+### Create a Word2Vec model using a larger sample dataset, focusing on how to preprocess the text, train the model, and explore various Word2Vec functionalities.
 
 ### Example: Analyzing Text Data with Word2Vec
 
