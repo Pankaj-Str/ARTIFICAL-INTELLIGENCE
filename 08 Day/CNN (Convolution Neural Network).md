@@ -1,5 +1,5 @@
 # CNN (Convolution Neural Network) 
-
+# https://cwpc.in/a-deep-dive-into-scipys-ndimage-module-by-codes-with-pankaj-e93dcbcb8b81
 ### **1. Introduction to CNNs**
 
 #### **1.1 What is a CNN?**
