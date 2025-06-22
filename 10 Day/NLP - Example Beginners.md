@@ -3,7 +3,7 @@
 
 ## NLP in Machine Learning
 
-### Goal: Sentiment Analysis – Detect if text is positive or negative.
+### Sentiment Analysis – Detect if text is positive or negative.
 
 
 ---
