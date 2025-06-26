@@ -8,7 +8,8 @@ def get_ip_address(domain):
         return f"Error: {e}"
 
 # Example usage:
-website_domain = "www.codeswithpankaj.com"
+website_domain = "www.github.com"
+
 ip_address = get_ip_address(website_domain)
 
 print(f"The IP address of {website_domain} is: {ip_address}")
