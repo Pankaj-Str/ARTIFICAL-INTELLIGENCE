@@ -18,6 +18,11 @@ ANN architecture is the **structure of a neural network**, consisting of:
 
 ---
 
+<img width="1536" height="1024" alt="ChatGPT Image Jan 22, 2026, 01_41_57 PM" src="https://github.com/user-attachments/assets/ef7f71c1-d2cb-464e-88c6-80f625ddd276" />
+
+
+---
+
 ## Main Components of ANN Architecture
 
 ### 1. Input Layer
