@@ -167,6 +167,10 @@ Output Layer : 3 neurons (classes)
 * Not ideal for very deep networks
 
 ---
+<img width="1536" height="1024" alt="ChatGPT Image Jan 22, 2026, 01_51_11 PM" src="https://github.com/user-attachments/assets/5e3ffcff-e6b6-444e-9ed1-29872783aade" />
+
+
+---
 
 ## When to Use Scikit-Learn ANN?
 
