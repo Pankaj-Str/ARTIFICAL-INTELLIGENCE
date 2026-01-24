@@ -56,3 +56,112 @@ Most networks today are basically stacks of
 
 That's the magic combination that lets neural networks learn very complicated patterns.
 
+
+----
+
+
+We'll use **Python + NumPy only** (no deep learning libraries like TensorFlow or PyTorch at first — so it's very clear what's happening).
+
+### Goal: 
+See with your own eyes how ReLU, Sigmoid and a tiny network changes its behavior with/without activation.
+
+```python
+import numpy as np
+
+# ───────────────────────────────────────────────
+#   1. The most common activation functions
+# ───────────────────────────────────────────────
+
+def relu(x):
+    return np.maximum(0, x)          # if x > 0 keep it, else 0
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))      # squashes to 0 … 1
+
+def linear(x):                       # no activation = straight line
+    return x
+
+# ───────────────────────────────────────────────
+#   2. Tiny fake neuron example
+# ───────────────────────────────────────────────
+
+# Imagine one neuron that gets 3 inputs
+inputs = np.array([1.0, -2.0, 0.5])   # ← our data example
+
+weights = np.array([0.8, 1.2, -0.3])  # ← learned (or random) importance
+bias    = 0.1
+
+# Step 1: weighted sum (what the neuron calculates before decision)
+z = np.dot(inputs, weights) + bias
+print("Raw calculation (z) =", z)               # ← this is BEFORE activation
+
+# Step 2: apply activation (the "decision")
+print("\nDifferent activations give different outputs:\n")
+
+print("Linear  (no activation) →", linear(z))
+print("ReLU                       →", relu(z))
+print("Sigmoid                    →", sigmoid(z))
+print("Sigmoid rounded nicely    →", round(sigmoid(z), 4))
+
+# ───────────────────────────────────────────────
+#   3. Why activation matters – tiny 2-layer network
+# ───────────────────────────────────────────────
+
+print("\n=== Without any activation (bad) ===")
+
+# Layer 1: 3 inputs → 4 hidden neurons
+W1 = np.random.randn(3, 4) * 0.1
+b1 = np.zeros(4)
+
+# Layer 2: 4 hidden → 1 output
+W2 = np.random.randn(4, 1) * 0.1
+b2 = np.zeros(1)
+
+# Forward pass — NO activation
+hidden = np.dot(inputs, W1) + b1
+output = np.dot(hidden, W2) + b2
+
+print("Output without activation →", output[0])
+
+print("\n=== With ReLU (good for most cases today) ===")
+
+hidden = relu(np.dot(inputs, W1) + b1)          # ← activation here!
+output = np.dot(hidden, W2) + b2
+
+print("Output with ReLU           →", output[0])
+
+print("\n=== With Sigmoid (old school style) ===")
+
+hidden = sigmoid(np.dot(inputs, W1) + b1)
+output = sigmoid(np.dot(hidden, W2) + b2)       # often used at the end
+
+print("Output with Sigmoid        →", round(output[0], 4))
+```
+
+### What to do with this code (beginner practice plan)
+
+1. Copy → paste into any Python environment (Google Colab, Jupyter, VSCode, even online python interpreters)
+2. Run it once → see numbers
+3. Change these lines and re-run each time:
+
+   ```python
+   inputs = np.array([1.0, -2.0, 0.5])   # ← try different numbers
+   inputs = np.array([-1, -1, -1])       # ← all negative
+   inputs = np.array([3, 4, 5])          # ← all big positive
+   ```
+
+4. Try replacing `relu` with `sigmoid` or remove it completely (`hidden = np.dot(...) + b1`)
+5. Add `print(hidden)` after each version to see how many neurons "die" (become 0) with ReLU
+
+### Quick Summary Table – What you will notice
+
+| Version               | Output behavior                              | Good for beginners to see? |
+|-----------------------|----------------------------------------------|-----------------------------|
+| No activation         | Output is almost same no matter layers       | YES – shows why we need it  |
+| Only ReLU             | Many values become 0 → network gets "selective" | YES – most common today     |
+| Only Sigmoid          | Everything squeezed to 0–1                   | YES – old but educational   |
+| ReLU hidden + Sigmoid output | Typical 2020–2025 classification network | Very good combo to remember |
+
+Try running it a few times — change inputs, watch how ReLU "kills" negative values, and how without activation the network can't really learn interesting patterns.
+
+
