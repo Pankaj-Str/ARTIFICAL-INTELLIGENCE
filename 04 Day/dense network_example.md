@@ -1,4 +1,4 @@
-## **example** of a Dense Neural Network in Python using **Keras** (TensorFlow).
+## **Example** of a Dense Neural Network in Python using **Keras** (TensorFlow).
 
 We’ll solve a classic toy problem:
 
