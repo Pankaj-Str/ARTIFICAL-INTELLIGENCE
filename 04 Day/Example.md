@@ -1,102 +1,188 @@
-# Build a Neural Network from Scratch in Python
+# Dense neural network example 
+### for classifying MNIST handwritten digits, but now using 
+- TensorFlow  Keras
 
-This guide walks you through building a simple neural network from scratch using Python. It covers the essential concepts such as defining layers, initializing weights and biases, and performing forward passes.
+Keras provides a simpler, higher-level API — many people find it easier for the first few models.
 
-## Prerequisites
+### Step-by-Step Example with Keras
 
-Ensure you have the following libraries installed in your Python environment:
+#### Step 1: Install (if needed) and Import Libraries
+In most environments (Colab, Jupyter, etc.) you already have TensorFlow. If not:
+
+```bash
+pip install tensorflow
+```
 
 ```python
-import sys
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
 import numpy as np
-import matplotlib 
-
-print(sys.version)
-print(np.__version__)
-print(matplotlib.__version__)
 ```
 
-Expected Output:
-```
-3.9.7 (default, Sep 16 2021, 16:59:28) [MSC v.1916 64 bit (AMD64)]
-1.19.5
-3.4.3
-```
-
-## Step 1: Create a Dense Layer Class
-
-Start by creating a class for a dense (fully connected) layer:
+#### Step 2: Load and Prepare the Data
+Keras has built-in MNIST loader — super convenient!
 
 ```python
-class Layer_Dense:
-    # Layer initialization
-    def __init__(self, n_inputs, n_neurons):
-        # Initialize weights and biases
-        pass # using pass statement as a placeholder
-    
-    # Forward pass
-    def forward(self, inputs):
-        # Calculate output values from inputs, weights and biases
-        pass # using pass statement as a placeholder
+# Load MNIST dataset
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+
+# Normalize pixel values to range [0, 1]
+x_train = x_train.astype("float32") / 255.0
+x_test  = x_test.astype("float32")  / 255.0
+
+print(f"Training samples: {x_train.shape[0]}, shape: {x_train.shape}")
+print(f"Test samples: {x_test.shape[0]}, shape: {x_test.shape}")
+# → Training samples: 60000, shape: (60000, 28, 28)
 ```
 
-## Step 2: Generate Random Weights
+No need for manual DataLoaders — Keras handles batching internally.
 
-For our example, we use a random number generator to initialize the weights:
+#### Step 3: Build the Dense Model
+We use the **Sequential** API (easiest for beginners).
 
 ```python
-import numpy as np 
-np.random.seed(0)
+model = keras.Sequential([
+    layers.Flatten(input_shape=(28, 28)),     # Flatten 28×28 → 784
+    layers.Dense(128, activation='relu'),     # Hidden layer 1
+    layers.Dense(64,  activation='relu'),     # Hidden layer 2
+    layers.Dense(10)                          # Output (logits for 10 classes)
+])
 
-# Define our dataset 
-X = [[1, 2, 3, 2.5],
-     [2.0, 5.0, -1.0, 2.0],
-     [-1.5, 2.7, 3.3, -0.8]]
+# See what we created
+model.summary()
 ```
 
-## Step 3: Implement the Dense Layer
+**Output example:**
+```
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ flatten (Flatten)           (None, 784)               0         
+ dense (Dense)               (None, 128)               100480    
+ dense_1 (Dense)             (None, 64)                8256      
+ dense_2 (Dense)             (None, 10)                650       
+=================================================================
+Total params: 109,386
+Trainable params: 109,386
+Non-trainable params: 0
+_________________________________________________________________
+```
 
-Next, we define the dense layer with its forward pass:
+- No manual `forward` method — Keras handles it.
+- Last layer has no activation (we'll use it with `from_logits=True` in the loss).
+
+#### Step 4: Compile the Model
+Choose optimizer, loss, and metrics.
 
 ```python
-class Dense_layer:
-    def __init__(self, n_inputs, n_neurons): 
-        # Generate weights randomly and multiply with 0.1 to make the numbers smaller
-        self.weight = 0.10 * np.random.randn(n_inputs, n_neurons) 
-        # Generate bias 
-        self.bias = np.zeros((1, n_neurons)) 
-    
-    # Define the forward function, it takes the dataset as input
-    def forward(self, inputs):
-        self.output = np.dot(inputs, self.weight) + self.bias
+model.compile(
+    optimizer='adam',
+    loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics=['accuracy']
+)
 ```
 
-## Step 4: Test the Dense Layer
+- `SparseCategoricalCrossentropy`: Use this when labels are integers (0–9), not one-hot.
+- `from_logits=True`: Because our last layer has raw logits (no softmax).
 
-Create two layers and perform a forward pass with the sample dataset:
+#### Step 5: Train the Model
 
 ```python
-# Create layers
-layer1 = Dense_layer(4, 5)
-layer2 = Dense_layer(5, 2)
-
-# Forward pass
-layer1.forward(X)
-layer2.forward(layer1.output)
-
-# Print the results
-print(layer1.output, '\n')
-print(layer2.output)
+history = model.fit(
+    x_train, y_train,
+    batch_size=64,
+    epochs=5,
+    validation_split=0.1,          # Use 10% of training data for validation
+    verbose=1
+)
 ```
 
-Expected Output:
+Typical output:
 ```
-[[ 0.10758131  1.03983522  0.24462411  0.31821498  0.18851053]
- [-0.08349796  0.70846411  0.00293357  0.44701525  0.36360538]
- [-0.50763245  0.55688422  0.07987797 -0.34889573  0.04553042]] 
-
-[[ 0.148296   -0.08397602]
- [ 0.14100315 -0.01340469]
- [ 0.20124979 -0.07290616]]
+Epoch 1/5
+844/844 [==============================] - 4s 4ms/step - loss: 0.3124 - accuracy: 0.9102 - val_loss: 0.1418 - val_accuracy: 0.9600
+Epoch 2/5
+844/844 [==============================] - 3s 4ms/step - loss: 0.1326 - accuracy: 0.9603 - val_loss: 0.1054 - val_accuracy: 0.9693
+...
+Epoch 5/5
+844/844 [==============================] - 3s 4ms/step - loss: 0.0612 - accuracy: 0.9815 - val_loss: 0.0821 - val_accuracy: 0.9760
 ```
 
+Training is usually faster and the code is shorter than the PyTorch version.
+
+#### Step 6: Evaluate on Test Set
+
+```python
+test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0)
+print(f"Test accuracy: {test_acc:.4f} ({test_acc*100:.2f}%)")
+```
+
+You should get ~96.5–97.5% accuracy after just 5 epochs (often a bit higher than the small PyTorch example because of slight differences in initialization / defaults).
+
+#### Optional: Make Predictions (Inference)
+
+```python
+# Predict on first 5 test images
+predictions = model(x_test[:5])                # raw logits
+probs = tf.nn.softmax(predictions, axis=1)    # probabilities
+predicted_classes = np.argmax(probs, axis=1)
+
+print("Predicted:", predicted_classes)
+print("True labels:", y_test[:5])
+```
+
+### Complete One-File Script (Keras Version)
+
+```python
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import numpy as np
+
+# 1. Load & prepare data
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+x_train = x_train.astype("float32") / 255.0
+x_test  = x_test.astype("float32")  / 255.0
+
+# 2. Build model
+model = keras.Sequential([
+    layers.Flatten(input_shape=(28, 28)),
+    layers.Dense(128, activation='relu'),
+    layers.Dense(64,  activation='relu'),
+    layers.Dense(10)
+])
+
+# 3. Compile
+model.compile(
+    optimizer='adam',
+    loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics=['accuracy']
+)
+
+model.summary()
+
+# 4. Train
+model.fit(x_train, y_train,
+          batch_size=64,
+          epochs=5,
+          validation_split=0.1)
+
+# 5. Evaluate
+test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0)
+print(f"\nTest accuracy: {test_acc:.4f} ({test_acc*100:.2f}%)")
+```
+
+### Why Choose Keras/TensorFlow Over PyTorch (for Beginners)?
+- Less code for the same result
+- Built-in dataset loaders
+- Easier high-level API (`Sequential`, `model.fit()` handles training loop)
+- Great integration with Google Colab (free GPU/TPU)
+- Production-ready (TensorFlow Serving, TFLite, etc.)
+
+### Quick Variations to Try
+- Add dropout: `layers.Dropout(0.2)` after each Dense
+- Change optimizer: `optimizer='sgd'` or `keras.optimizers.Adam(learning_rate=0.0005)`
+- More epochs → better accuracy (try 10–15)
+- Use one-hot labels + `CategoricalCrossentropy` (instead of sparse)
