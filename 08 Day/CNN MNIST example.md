@@ -1,4 +1,4 @@
-# CNN MNIST example** — 
+# CNN MNIST example — 
 
 - We'll add three useful visualizations using **Matplotlib** and **scikit-learn**:
 
