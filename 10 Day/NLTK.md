@@ -1,115 +1,462 @@
-# Simple NLTK ( stemming/ lemmatization / regex / stop words, corpus, unigram, bigram, trigram )
-### Simple NLTK Tutorial: Core Concepts and Practical Examples
+# basic NLP concepts
 
-The Natural Language Toolkit (NLTK) is a powerful Python library designed for working with human language data. It includes easy-to-use interfaces to over 50 corpora and lexical resources such as WordNet, along with a suite of text processing libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning. This tutorial will cover fundamental concepts like stemming, lemmatization, regular expressions, stop words, corpora, and n-grams (unigram, bigram, trigram).
+Imagine this sentence:  
+**"The quick brown foxes are running happily in the forest yesterday."**
 
-### 1. **Introduction to NLTK**
+### 1. Corpus
+- **Corpus** = A big collection of text documents.  
+  It's like your "library of text" that the computer learns from.
 
-To get started with NLTK, you first need to install it and download the necessary datasets:
+Examples of corpus:
+- All Wikipedia articles
+- All tweets in English
+- Harry Potter books
+- Movie reviews dataset
 
-```bash
-pip install nltk
+### 2. Stop Words
+- Very common words that usually **don't add much meaning** → we remove them to make text lighter.
+
+Common stop words: the, is, are, and, in, on, at, to, a, an, of, for, with...
+
+Before: "The quick brown foxes are running happily in the forest yesterday."  
+After removing stop words: "quick brown foxes running happily forest yesterday"
+
+### 3. Stemming
+- Cuts words to their **root form** (stem) using simple rules.  
+- Fast but sometimes **not perfect** (can create non-real words).
+
+Examples:
+
+| Original word   | After Stemming (Porter stemmer) |
+|-----------------|---------------------------------|
+| running         | run                             |
+| runs            | run                             |
+| runner          | runner                          |
+| happily         | happi                           |
+| foxes           | fox                             |
+| yesterday       | yesterday                       |
+
+→ "happi" is not a real word → that's why stemming is crude.
+
+### 4. Lemmatization
+- Smarter than stemming → reduces word to its **proper base form** (dictionary form / lemma).  
+- Understands meaning and part-of-speech (noun/verb/etc.).
+
+Examples:
+
+| Original word   | After Lemmatization            |
+|-----------------|--------------------------------|
+| running         | run                            |
+| runs            | run                            |
+| runner          | runner                         |
+| happily         | happy                          |
+| foxes           | fox                            |
+| better          | good                           |
+| went            | go                             |
+
+→ Much cleaner and real English words!
+
+Stemming vs Lemmatization (quick summary):
+
+Original   → Stemming → Lemmatization  
+running    → run       → run  
+happily    → happi     → happy  
+better     → better    → good
+
+### 5. Regex (Regular Expressions)
+- Very powerful pattern-matching tool.  
+- Used to find/replace/clean specific patterns in text.
+
+Super simple examples:
+
+| Task                              | Regex pattern     | Example what it matches              |
+|-----------------------------------|-------------------|--------------------------------------|
+| Find all numbers                  | \d+               | 123, 45, 2026                        |
+| Remove email addresses            | [\w\.-]+@[\w\.-]+ | pankaj123@gmail.com                  |
+| Find words that start with capital| ^[A-Z]            | The, Pankaj, Mumbai                  |
+| Remove special characters         | [^a-zA-Z0-9\s]    | ! @ # $ % ^ & * ( )                  |
+
+Common use: cleaning tweets → remove @usernames, #hashtags, URLs, etc.
+
+### 6. N-grams (Unigram, Bigram, Trigram...)
+- Way to break text into **small sequences of words**.
+
+| Type      | n value | Meaning                        | Example from sentence: "I love to code" |
+|-----------|---------|--------------------------------|------------------------------------------|
+| **Unigram**   | 1       | Single word                    | I, love, to, code                        |
+| **Bigram**    | 2       | Two words together             | I love, love to, to code                 |
+| **Trigram**   | 3       | Three words together           | I love to, love to code                  |
+
+Why use n-grams?
+- Unigram → ignores order → "dog bites man" and "man bites dog" look same
+- Bigram/Trigram → keeps some order & context → much better for meaning
+
+Real-life use:
+- Autocomplete (Google search suggestions) → uses bigrams & trigrams
+- Spell correction
+- Chatbots understand "New York" as bigram (not "new" + "york" separately)
+
+### Quick Summary Table (Super Easy)
+
+| Concept         | What it does                              | Example Input → Output                          |
+|-----------------|-------------------------------------------|-------------------------------------------------|
+| Stop words      | Remove common useless words               | the cat is → cat                                |
+| Stemming        | Cut to rough root (fast, rough)           | running, runs → run                             |
+| Lemmatization   | Cut to correct base word (smart)          | running, ran → run                              |
+| Regex           | Find & clean patterns                     | price: $99.99 → price 99.99                     |
+| Unigram         | 1 word                                    | I love NLP                                      |
+| Bigram          | 2 words together                          | I love, love NLP                                |
+| Trigram         | 3 words together                          | I love NLP                                      |
+| Corpus          | Big text collection                       | All news articles from 2025                     |
+
+These are the **first steps** almost everyone learns in NLP — very important for cleaning text before doing any real ML/AI work!
+
+-----
+
+> **"The cats are running in the garden."**
+
+---
+
+# 1. Stemming
+
+**Stemming** reduces a word to its **root form** by removing suffixes like *ing, ed, ly*.
+
+It may not always produce a real word.
+
+### Example
+
+| Word    | Stemmed Word |
+| ------- | ------------ |
+| running | run          |
+| playing | play         |
+| studies | studi        |
+| cats    | cat          |
+
+Example sentence after stemming:
+
+Original
+
+```
+The cats are running in the garden
 ```
 
-In your Python environment, you can set up NLTK with:
+After stemming
 
-```python
-import nltk
-nltk.download('popular')
+```
+the cat are run in the garden
 ```
 
-### 2. **Text Preprocessing Techniques**
-
-#### **2.1 Tokenization**
-Breaking text into words or sentences.
-
-```python
-from nltk.tokenize import word_tokenize, sent_tokenize
-
-text = "Hello there! How are you today? I hope you're learning a lot from this tutorial."
-print(sent_tokenize(text))
-print(word_tokenize(text))
-```
-
-#### **2.2 Stop Words Removal**
-Removing common words that may not add much meaning to the text.
-
-```python
-from nltk.corpus import stopwords
-stop_words = set(stopwords.words('english'))
-
-words = word_tokenize(text)
-filtered_words = [word for word in words if not word in stop_words]
-print(filtered_words)
-```
-
-#### **2.3 Stemming**
-Reducing words to their word stem or root form.
+### Python Example
 
 ```python
 from nltk.stem import PorterStemmer
 
 stemmer = PorterStemmer()
-stemmed_words = [stemmer.stem(word) for word in filtered_words]
-print(stemmed_words)
+
+words = ["running","playing","studies","cats"]
+
+for word in words:
+    print(stemmer.stem(word))
 ```
 
-#### **2.4 Lemmatization**
-Similar to stemming but brings context to the words. It links words with similar meanings to one word.
+Output
+
+```
+run
+play
+studi
+cat
+```
+
+---
+
+# 2. Lemmatization
+
+**Lemmatization** converts a word into its **dictionary base form (lemma)**.
+
+It is **more accurate than stemming**.
+
+### Example
+
+| Word    | Lemma |
+| ------- | ----- |
+| running | run   |
+| better  | good  |
+| studies | study |
+| cats    | cat   |
+
+Example sentence after lemmatization
+
+```
+The cat be run in the garden
+```
+
+### Python Example
 
 ```python
 from nltk.stem import WordNetLemmatizer
-nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
-lemmatized_words = [lemmatizer.lemmatize(word) for word in filtered_words]
-print(lemmatized_words)
+
+words = ["running","studies","cats"]
+
+for word in words:
+    print(lemmatizer.lemmatize(word))
 ```
 
-### 3. **Working with Regular Expressions (Regex)**
+Output
 
-Regular expressions in NLTK are used for identifying patterns in text. Here’s an example to extract all words starting with 'H' or 'h'.
+```
+running
+study
+cat
+```
+
+---
+
+# 3. Regex (Regular Expression)
+
+**Regex** is used to **search, match, or clean text patterns**.
+
+### Example
+
+Sentence
+
+```
+My phone number is 9876543210
+```
+
+We can extract numbers using regex.
+
+### Python Example
 
 ```python
 import re
-pattern = r'\b[Hh]\w+'
-matched_words = re.findall(pattern, text)
-print(matched_words)
+
+text = "My phone number is 9876543210"
+
+numbers = re.findall(r'\d+', text)
+
+print(numbers)
 ```
 
-### 4. **Using Corpora**
-NLTK provides access to many text corpora, which are large collections of text that are used to train NLP models.
+Output
+
+```
+['9876543210']
+```
+
+Regex is useful for:
+
+* Email extraction
+* Removing punctuation
+* Finding numbers
+* Cleaning text
+
+---
+
+# 4. Stop Words
+
+**Stop words** are common words that **do not add important meaning**.
+
+Examples:
+
+```
+is
+the
+are
+in
+and
+a
+to
+```
+
+Sentence
+
+```
+The cats are running in the garden
+```
+
+After removing stop words
+
+```
+cats running garden
+```
+
+### Python Example
 
 ```python
-from nltk.corpus import gutenberg
-print(gutenberg.fileids())
+from nltk.corpus import stopwords
 
-# Sample text from "Alice in Wonderland"
-alice_text = gutenberg.raw('carroll-alice.txt')
-print(alice_text[:500])  # Print first 500 characters
+text = "The cats are running in the garden"
+
+stop_words = set(stopwords.words("english"))
+
+words = text.split()
+
+filtered = [w for w in words if w.lower() not in stop_words]
+
+print(filtered)
 ```
 
-### 5. **N-Grams (Unigram, Bigram, Trigram)**
+Output
 
-N-grams are combinations of adjacent words or letters in the text. Here’s how you can generate unigrams, bigrams, and trigrams:
+```
+['cats', 'running', 'garden']
+```
+
+---
+
+# 5. Corpus
+
+A **corpus** is a **large collection of text data** used to train NLP models.
+
+Examples of corpus:
+
+* Wikipedia articles
+* News articles
+* Books
+* Tweets
+
+Example small corpus:
+
+```
+Document 1: I love machine learning
+Document 2: Machine learning is powerful
+Document 3: NLP is part of AI
+```
+
+This collection of documents is called a **corpus**.
+
+---
+
+# 6. Unigram
+
+A **unigram** is a **single word token**.
+
+Sentence
+
+```
+I love NLP
+```
+
+Unigrams
+
+```
+I
+love
+NLP
+```
+
+### Python Example
 
 ```python
-from nltk import bigrams, trigrams, ngrams
+text = "I love NLP"
 
-words = ['I', 'love', 'to', 'learn', 'NLP']
-unigrams = words
-bigrams_list = list(bigrams(words))
-trigrams_list = list(trigrams(words))
+words = text.split()
 
-print("Unigrams:", unigrams)
-print("Bigrams:", bigrams_list)
-print("Trigrams:", trigrams_list)
-
-# General n-grams, here n=4
-n_grams = list(ngrams(words, 4))
-print("Four-grams:", n_grams)
+print(words)
 ```
 
-### 6. **Conclusion**
+Output
 
-NLTK is a comprehensive library with a vast array of functionalities for text processing and analysis. Understanding these fundamental components—stemming, lemmatization, regex, stop words, corpus usage, and n-grams—provides a solid foundation for tackling more complex NLP tasks. With these tools, you can preprocess text effectively and prepare it for deeper NLP tasks like sentiment analysis, topic modeling, or machine translation.
+```
+['I','love','NLP']
+```
+
+---
+
+# 7. Bigram
+
+A **bigram** is a **pair of two consecutive words**.
+
+Sentence
+
+```
+I love NLP
+```
+
+Bigrams
+
+```
+I love
+love NLP
+```
+
+### Python Example
+
+```python
+from nltk.util import ngrams
+
+text = "I love NLP"
+
+words = text.split()
+
+bigrams = list(ngrams(words,2))
+
+print(bigrams)
+```
+
+Output
+
+```
+[('I','love'),('love','NLP')]
+```
+
+---
+
+# 8. Trigram
+
+A **trigram** is a **group of three consecutive words**.
+
+Sentence
+
+```
+I love machine learning
+```
+
+Trigrams
+
+```
+I love machine
+love machine learning
+```
+
+### Python Example
+
+```python
+from nltk.util import ngrams
+
+text = "I love machine learning"
+
+words = text.split()
+
+trigrams = list(ngrams(words,3))
+
+print(trigrams)
+```
+
+Output
+
+```
+[('I','love','machine'),('love','machine','learning')]
+```
+
+---
+
+# Quick Summary
+
+| Concept       | Meaning                               |
+| ------------- | ------------------------------------- |
+| Stemming      | Cuts word to root form                |
+| Lemmatization | Converts word to dictionary base form |
+| Regex         | Pattern matching in text              |
+| Stop Words    | Common words removed from text        |
+| Corpus        | Collection of text documents          |
+| Unigram       | Single word                           |
+| Bigram        | Two-word combination                  |
+| Trigram       | Three-word combination                |
+
+---
+
+
