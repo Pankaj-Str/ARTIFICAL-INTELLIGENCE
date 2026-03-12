@@ -2,10 +2,6 @@
 
 ![Image](https://images.openai.com/static-rsc-3/XmrmaflMqFcumrDWaK_VcNyg_sknQTDu8bqpyhht048ATYt1nn78UVRgnjR-xnkQI36N02LJXf4QTZu7AvZ9AIOe7o751wWcfWgWnKljegY?purpose=fullsize\&v=1)
 
-![Image](https://www.researchgate.net/publication/356067503/figure/fig4/AS%3A1171042127101958%401656209608225/A-pictorial-description-of-residual-skip-connections-of-the-ResNet-model-30.png)
-
-![Image](https://www.researchgate.net/publication/350421671/figure/fig1/AS%3A1005790324346881%401616810508674/An-illustration-of-ResNet-50-layers-architecture.png)
-
 ![Image](https://images.surferseo.art/628dd72f-587a-429b-84c6-96128f3a47fd.png)
 
 ### 1. What is ResNet50?
