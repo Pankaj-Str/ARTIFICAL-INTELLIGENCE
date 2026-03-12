@@ -4,7 +4,7 @@
 
 ![Image](https://www.researchgate.net/publication/346132786/figure/fig2/AS%3A961313148792832%401606206323880/Example-of-text-vectorization-based-on-a-bagof-words-model.png)
 
-![Image](https://www.mathworks.com/discovery/bag-of-words/_jcr_content/thumbnail.adapt.1200.medium.jpg/1643957744923.jpg)
+
 
 ![Image](https://www.analyticssteps.com/backend/media/uploads/2019/09/06/image-20190906164045-2.jpeg)
 
