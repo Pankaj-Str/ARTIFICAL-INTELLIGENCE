@@ -2,10 +2,6 @@
 
 ![Image](https://miro.medium.com/1%2AaxffCQ9ae0FHXxhuy66FbA.png)
 
-![Image](https://www.researchgate.net/publication/346132786/figure/fig2/AS%3A961313148792832%401606206323880/Example-of-text-vectorization-based-on-a-bagof-words-model.png)
-
-
-
 ![Image](https://www.analyticssteps.com/backend/media/uploads/2019/09/06/image-20190906164045-2.jpeg)
 
 ### 1. What is Bag of Words (BoW)?
