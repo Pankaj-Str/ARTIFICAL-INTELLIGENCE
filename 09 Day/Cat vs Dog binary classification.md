@@ -11,6 +11,7 @@
 This example shows how to use **ResNet-50** with a **real dataset (Cats vs Dogs)** to build an **image classification model** using **TensorFlow** and **Keras**.
 
 We will use the **Dogs vs. Cats Dataset** which contains thousands of cat and dog images.
+https://www.kaggle.com/competitions/dogs-vs-cats
 
 ---
 
