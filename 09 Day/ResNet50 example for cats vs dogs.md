@@ -1,149 +1,164 @@
-# Like the ResNet50 example for cats vs dogs
+## ResNet50 (Residual Network)
 
-- Load your fine-tuned model  
-- Drag-and-drop (or select) **your own pet photo**  
-- Get a prediction: "cat" or "dog" with a confidence score
+![Image](https://images.openai.com/static-rsc-3/XmrmaflMqFcumrDWaK_VcNyg_sknQTDu8bqpyhht048ATYt1nn78UVRgnjR-xnkQI36N02LJXf4QTZu7AvZ9AIOe7o751wWcfWgWnKljegY?purpose=fullsize\&v=1)
 
-### Option 1: Quick Python script (command-line + shows the image)
+![Image](https://www.researchgate.net/publication/356067503/figure/fig4/AS%3A1171042127101958%401656209608225/A-pictorial-description-of-residual-skip-connections-of-the-ResNet-model-30.png)
 
-Save this as `predict_my_pet.py`
+![Image](https://www.researchgate.net/publication/350421671/figure/fig1/AS%3A1005790324346881%401616810508674/An-illustration-of-ResNet-50-layers-architecture.png)
+
+![Image](https://images.surferseo.art/628dd72f-587a-429b-84c6-96128f3a47fd.png)
+
+### 1. What is ResNet50?
+
+**ResNet50** is a deep learning model used for **image classification**.
+It was introduced by researchers from Microsoft Research in the ImageNet Large Scale Visual Recognition Challenge.
+
+* **ResNet = Residual Network**
+* **50 = number of layers**
+
+ResNet solves the **vanishing gradient problem** in very deep neural networks by using **skip connections (residual connections)**.
+
+**Simple idea:**
+
+Instead of learning:
+
+[
+H(x)
+]
+
+ResNet learns the **residual**:
+
+[
+F(x) = H(x) - x
+]
+
+Then output becomes:
+
+[
+Output = F(x) + x
+]
+
+This allows the network to train **very deep models (50+ layers)** efficiently.
+
+---
+
+## 2. Where ResNet50 is Used
+
+ResNet50 is widely used in AI applications such as:
+
+1. **Image Classification**
+
+   * Detecting objects in images
+
+2. **Medical Imaging**
+
+   * Tumor detection from MRI/CT scans
+
+3. **Face Recognition**
+
+4. **Self-Driving Cars**
+
+   * Object detection (cars, pedestrians)
+
+5. **Transfer Learning**
+
+   * Pretrained model for new datasets
+
+---
+
+# 3. ResNet50 Example Using Python
+
+We will use **TensorFlow + Keras** to classify an image.
+
+### Install Libraries
 
 ```python
-# predict_my_pet.py
-# Run: python predict_my_pet.py
+pip install tensorflow numpy matplotlib
+```
 
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
+---
+
+### Python Example (Image Classification)
+
+```python
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-import os
+from tensorflow.keras.applications.resnet50 import ResNet50
+from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
 
-# ─── CHANGE THIS to your saved model path ───
-MODEL_PATH = "cat_dog_resnet50_finetuned.h5"   # ← update this!
+# Load pretrained ResNet50 model
+model = ResNet50(weights='imagenet')
 
-if not os.path.exists(MODEL_PATH):
-    print(f"Model not found at {MODEL_PATH}")
-    print("Make sure you saved it after fine-tuning with: model.save('cat_dog_resnet50_finetuned.h5')")
-    sys.exit(1)
+# Load image
+img_path = "dog.jpg"
+img = image.load_img(img_path, target_size=(224,224))
 
-# Load the model
-print("Loading model...")
-model = load_model(MODEL_PATH)
-print("Model loaded.")
+# Convert image to array
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis=0)
 
-def predict_pet_image(image_path):
-    # Load and prepare image
-    img = load_img(image_path, target_size=(224, 224))
-    img_array = img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0) / 255.0   # normalize
+# Preprocess image
+x = preprocess_input(x)
 
-    # Predict
-    prob = model.predict(img_array)[0][0]
-    label = "dog" if prob > 0.5 else "cat"
-    confidence = prob if prob > 0.5 else 1 - prob
-    confidence_pct = confidence * 100
+# Prediction
+preds = model.predict(x)
 
-    # Show result
-    plt.figure(figsize=(6, 6))
-    plt.imshow(img)
-    plt.title(f"{label.upper()} ({confidence_pct:.1f}% confident)")
-    plt.axis('off')
-    plt.show()
-
-    print(f"\nPrediction: **{label}**  (confidence: {confidence_pct:.1f}%)")
-
-# ─── Get image from user ───
-if len(sys.argv) > 1:
-    image_path = sys.argv[1]
-else:
-    image_path = input("Drag & drop your pet photo here (or type full path): ").strip().strip("'\"")
-
-if not os.path.exists(image_path):
-    print("File not found. Please check the path.")
-else:
-    predict_pet_image(image_path)
+# Show top predictions
+print("Predicted:", decode_predictions(preds, top=3)[0])
 ```
 
-**How to use it**
+---
 
-1. After fine-tuning, save your model once:
-   ```python
-   model.save("cat_dog_resnet50_finetuned.h5")
-   ```
+## 4. Example Output
 
-2. Run the script:
-   ```bash
-   python predict_my_pet.py
-   ```
-
-3. Drag your photo into the terminal (or paste the path) → it shows the image + prediction
-
-### Option 2: Very simple web interface (using Gradio – recommended for fun)
-
-Install once:
-```bash
-pip install gradio
+```
+Predicted:
+1. Labrador retriever – 92%
+2. Golden retriever – 5%
+3. Tennis ball – 1%
 ```
 
-Then run this script:
+This means the model thinks the image most likely contains a **Labrador dog**.
 
-```python
-# pet_classifier_app.py
-# Run: python pet_classifier_app.py   → opens in browser
+---
 
-import gradio as gr
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import img_to_array
-import numpy as np
+# 5. Why ResNet50 is Powerful
 
-# Load your fine-tuned model
-model = load_model("cat_dog_resnet50_finetuned.h5")
+| Feature           | Explanation           |
+| ----------------- | --------------------- |
+| Deep Network      | 50 layers             |
+| Skip Connections  | Helps gradients flow  |
+| Pretrained Models | Trained on ImageNet   |
+| High Accuracy     | Excellent performance |
 
-def classify_pet(img):
-    # Prepare image
-    img = img.resize((224, 224))
-    img_array = img_to_array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+---
 
-    # Predict
-    prob = model.predict(img_array)[0][0]
-    if prob > 0.5:
-        label = "Dog"
-        confidence = prob
-    else:
-        label = "Cat"
-        confidence = 1 - prob
+# 6. Simple Real-World Example
 
-    return f"{label} ({confidence*100:.1f}% confident)"
+Imagine you want to build:
 
-# Create Gradio interface
-demo = gr.Interface(
-    fn=classify_pet,
-    inputs=gr.Image(type="pil", label="Upload your pet photo 🐱🐶"),
-    outputs="text",
-    title="My Pet Classifier (Cat vs Dog)",
-    description="Fine-tuned ResNet50 – upload a photo of your cat or dog!",
-    examples=[
-        ["https://images.unsplash.com/photo-1583511655857-d19b40a7a54e"],  # cute dog
-        ["https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba"]   # cute cat
-    ],
-    cache_examples=False
-)
+**AI system to detect fruits**
 
-demo.launch()
+Input image → 🍎🍌🍊
+ResNet50 analyzes the image and outputs:
+
+```
+Apple – 95%
+Banana – 3%
+Orange – 2%
 ```
 
-**What you get**
-- Browser window opens automatically  
-- Drag & drop photos or click to upload  
-- Instant prediction with confidence %  
-- Looks nice and shareable
+This is how **image classification AI systems work**.
 
-**Quick tips**
+---
 
-- Works best with clear, single-pet photos (face/body visible)  
-- If accuracy is low on your real photos → collect 20–50 of your own pet photos and do another round of fine-tuning  
-- You can later extend it to tell apart *your* cat vs *other* cats (multi-class)
+**Summary**
+
+* **ResNet50** is a deep convolutional neural network.
+* Uses **skip connections** to train deep models.
+* Commonly used for **image classification and transfer learning**.
+* Easy to use with **TensorFlow / Keras pretrained models**.
+
+---
 
