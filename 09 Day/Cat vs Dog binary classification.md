@@ -1,160 +1,183 @@
-# ResNet50
+## ResNet50 Example with Real Dataset (Cats vs Dogs)
 
-The best balance of speed and accuracy) for a **Cat vs Dog binary classification** task.
+![Image](https://user-images.githubusercontent.com/19996897/39514811-e8224404-4e15-11e8-9440-637536201f39.PNG)
 
-We’ll use the famous **Cats vs Dogs dataset** from Kaggle (or TensorFlow directly) and fine-tune ResNet50 in just a few steps.
+![Image](https://camo.githubusercontent.com/2c77f234deb5e40bdfabf921a8b335690b22814c3706b196dd9c7fa0495147cb/68747470733a2f2f6d69726f2e6d656469756d2e636f6d2f6d61782f333834302f312a6f4233533579484868766f75674a6b50587563386f672e676966)
 
-### Full Working Code (Keras / TensorFlow) – Runs in <10 minutes on Colab or any GPU
+![Image](https://images.openai.com/static-rsc-3/Jp1sN5GGlAhtPlaHuJiTx6nMHx3JJhT-z0-F9qy6R1t6ozou-t6YaxnpQXBT6ppUlEYN-Rl4WnZhaU4Vl1HzmQ0bE62ZbdKFtLu8QGptvZQ?purpose=fullsize\&v=1)
+
+![Image](https://user-images.githubusercontent.com/40482921/232365269-f5d90997-34b5-4091-9151-4df1dc13c54b.png)
+
+This example shows how to use **ResNet-50** with a **real dataset (Cats vs Dogs)** to build an **image classification model** using **TensorFlow** and **Keras**.
+
+We will use the **Dogs vs. Cats Dataset** which contains thousands of cat and dog images.
+
+---
+
+# 1. Install Required Libraries
 
 ```python
-# Fine-tuning ResNet50 for Cat vs Dog Classification (Beginner Friendly)
+pip install tensorflow matplotlib numpy
+```
 
+---
+
+# 2. Import Libraries
+
+```python
 import tensorflow as tf
-from tensorflow.keras.applications import ResNet50
-from tensorflow.keras import layers, models, optimizers
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+```
 
-# Step 1: Load the Cats vs Dogs dataset (built into TensorFlow!)
-# It automatically downloads ~800MB
-_URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
-path_to_zip = tf.keras.utils.get_file('cats_and_dogs.zip', origin=_URL, extract=True)
-PATH = path_to_zip.replace('.zip', '')
+---
 
-train_dir = PATH + '/cats_and_dogs_filtered/train'
-validation_dir = PATH + '/cats_and_dogs_filtered/validation'
+# 3. Load Dataset
 
-# 2000 training images (1000 cats + 1000 dogs), 1000 validation
+TensorFlow provides an easy dataset loader.
 
-# Step 2: Data preprocessing + augmentation (helps prevent overfitting)
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    rotation_range=40,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True,
-    fill_mode='nearest'
+```python
+dataset = tf.keras.utils.image_dataset_from_directory(
+    "dataset/",
+    image_size=(224,224),
+    batch_size=32
 )
+```
 
-val_datagen = ImageDataGenerator(rescale=1./255)  # Only rescale for validation
+Folder structure should look like this:
 
-# Automatically load images from folders
-train_generator = train_datagen.flow_from_directory(
-    train_dir,
-    target_size=(224, 224),      # ResNet50 expects 224x224
-    batch_size=32,
-    class_mode='binary'          # 0 = cat, 1 = dog
+```
+dataset/
+      cats/
+          cat1.jpg
+          cat2.jpg
+      dogs/
+          dog1.jpg
+          dog2.jpg
+```
+
+---
+
+# 4. Load ResNet50 Pretrained Model
+
+We use **transfer learning** (pretrained weights from ImageNet).
+
+```python
+base_model = tf.keras.applications.ResNet50(
+    weights='imagenet',
+    include_top=False,
+    input_shape=(224,224,3)
 )
+```
 
-validation_generator = val_datagen.flow_from_directory(
-    validation_dir,
-    target_size=(224, 224),
-    batch_size=32,
-    class_mode='binary'
-)
+Freeze pretrained layers:
 
-# Step 3: Load pre-trained ResNet50 (without the top classifier)
-base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+```python
+for layer in base_model.layers:
+    layer.trainable = False
+```
 
-# Freeze the base model first (we'll only train the new top layers)
-base_model.trainable = False
+---
 
-# Step 4: Add your own classifier on top
-model = models.Sequential([
-    base_model,
-    layers.GlobalAveragePooling2D(),   # Converts 7x7x2048 → 2048 vector
-    layers.Dense(256, activation='relu'),
-    layers.Dropout(0.5),               # Helps prevent overfitting
-    layers.Dense(1, activation='sigmoid')  # Binary output: cat (0) or dog (1)
-])
+# 5. Add Custom Classification Layers
 
-model.summary()
+```python
+x = base_model.output
+x = tf.keras.layers.GlobalAveragePooling2D()(x)
+x = tf.keras.layers.Dense(128, activation='relu')(x)
+output = tf.keras.layers.Dense(1, activation='sigmoid')(x)
 
-# Step 5: Compile the model
+model = tf.keras.Model(inputs=base_model.input, outputs=output)
+```
+
+---
+
+# 6. Compile Model
+
+```python
 model.compile(
-    optimizer=optimizers.Adam(learning_rate=0.0001),
+    optimizer='adam',
     loss='binary_crossentropy',
     metrics=['accuracy']
 )
-
-# Step 6: Train only the top layers first (fast and stable)
-history = model.fit(
-    train_generator,
-    steps_per_epoch=train_generator.samples // train_generator.batch_size,
-    epochs=10,
-    validation_data=validation_generator,
-    validation_steps=validation_generator.samples // validation_generator.batch_size
-)
-
-# Step 7: Unfreeze some layers of ResNet50 for fine-tuning (optional but boosts accuracy)
-base_model.trainable = True
-
-# Fine-tune from this layer onwards (usually last 50-100 layers)
-fine_tune_at = 100
-for layer in base_model.layers[:fine_tune_at]:
-    layer.trainable = False
-
-# Use a VERY small learning rate when fine-tuning
-model.compile(optimizer=optimizers.Adam(1e-5),  # 10x smaller
-              loss='binary_crossentropy',
-              metrics=['accuracy'])
-
-# Continue training (more epochs)
-history_fine = model.fit(
-    train_generator,
-    steps_per_epoch=train_generator.samples // train_generator.batch_size,
-    epochs=10,  # Total 20 epochs now
-    validation_data=validation_generator,
-    validation_steps=validation_generator.samples // validation_generator.batch_size
-)
-
-# Step 8: Plot accuracy & loss
-acc = history.history['accuracy'] + history_fine.history['accuracy']
-val_acc = history.history['val_accuracy'] + history_fine.history['val_accuracy']
-
-plt.figure(figsize=(8, 5))
-plt.plot(acc, label='Training Accuracy')
-plt.plot(val_acc, label='Validation Accuracy')
-plt.title('Fine-tuned ResNet50: Cat vs Dog')
-plt.legend()
-plt.show()
-
-# Final result: Usually reaches 95–98% validation accuracy!
-print("Final Validation Accuracy: {:.2f}%".format(val_acc[-1] * 100))
 ```
 
-### Expected Results After 20 Epochs
-```
-Final Validation Accuracy: 96.5% ~ 98.2%
-```
-(With good augmentation and fine-tuning)
+---
 
-### You Can Replace ResNet50 With Any Other Model!
-
-Just change one line:
+# 7. Train the Model
 
 ```python
-# For VGG16
-from tensorflow.keras.applications import VGG16
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-
-# For InceptionV3 (use 299x299 images!)
-base_model = tf.keras.applications.InceptionV3(weights='imagenet', include_top=False, input_shape=(299, 299, 3))
-# And change target_size=(299,299) in generators
+history = model.fit(
+    dataset,
+    epochs=5
+)
 ```
 
-### Summary: Why This Works So Well
+Example output:
 
-| Step                  | Why It Matters                                   |
-|-----------------------|--------------------------------------------------|
-| Pre-trained weights   | Already knows edges, shapes, animal parts        |
-| Freeze base           | Fast & stable training at first                  |
-| Add new head          | Learns to say “this is a cat, not 1000 classes”  |
-| Data augmentation     | Prevents overfitting on small dataset            |
-| Fine-tune later       | Slightly adjusts deep features for cats/dogs     |
+```
+Epoch 1/5
+accuracy: 0.86
+Epoch 5/5
+accuracy: 0.95
+```
 
+The model learns to distinguish **cats vs dogs**.
+
+---
+
+# 8. Test the Model
+
+```python
+img = tf.keras.preprocessing.image.load_img(
+    "test_dog.jpg",
+    target_size=(224,224)
+)
+
+img_array = tf.keras.preprocessing.image.img_to_array(img)
+img_array = np.expand_dims(img_array, axis=0)
+
+prediction = model.predict(img_array)
+
+if prediction > 0.5:
+    print("Dog")
+else:
+    print("Cat")
+```
+
+Example result:
+
+```
+Dog
+```
+
+---
+
+# 9. Simple Working Flow
+
+```
+Image Input
+      ↓
+ResNet50 Feature Extraction
+      ↓
+Dense Layer
+      ↓
+Sigmoid Output
+      ↓
+Prediction (Cat or Dog)
+```
+
+---
+
+# 10. Why Use ResNet50 Here?
+
+| Reason            | Benefit                            |
+| ----------------- | ---------------------------------- |
+| Pretrained Model  | Already learned millions of images |
+| Deep Network      | Better feature extraction          |
+| Transfer Learning | Works well with small datasets     |
+| High Accuracy     | Better than simple CNN             |
+
+---
 
 
