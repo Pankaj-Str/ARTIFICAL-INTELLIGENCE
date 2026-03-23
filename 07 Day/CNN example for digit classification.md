@@ -1,4 +1,6 @@
-# CNN example** for **digit classification** (MNIST dataset — handwritten digits 0–9).
+# CNN example
+
+**digit classification** (MNIST dataset — handwritten digits 0–9).
 
 We'll use **two popular styles** so you can choose the one that feels easier for you:
 
