@@ -11,7 +11,7 @@ The **activation function** is exactly that **decision rule** — it takes the r
 
 Without activation function → the whole network would just be one big linear equation → no matter how many layers → it still behaves like a single straight line → very weak model.
 
-### Most Popular Activation Functions (explained like a 12-year-old would understand)
+### Most Popular Activation Functions 
 
 | Name              | What it does (very simply)                          | Output range     | When people mostly use it today (2024–2025) | Feels like...                     |
 |-------------------|------------------------------------------------------|------------------|-----------------------------------------------|------------------------------------|
