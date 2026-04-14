@@ -1,11 +1,5 @@
 # Cost Functions in Neural Networks for Beginners
 
-Hello! If you're new to neural networks (like from our previous chat on sigmoid), this tutorial will make cost functions super simple. We'll build on basics—no prior knowledge needed beyond knowing neural networks make predictions and learn from errors.
-
-Cost functions (also called loss functions) are the "scorekeepers" that tell your model how bad its guesses are. The goal? Make that score as low as possible by tweaking the model during training.
-
-We'll use Python with NumPy (for math), Matplotlib (for plots), and TensorFlow/Keras (for a real network). Run this in Google Colab or your Python setup—install with `pip install numpy matplotlib tensorflow scikit-learn`.
-
 ---
 
 #### Step 1: What is a Cost Function? (The Basics)
