@@ -1,11 +1,4 @@
 # Understanding Optimization Functions in Neural Networks
-
-Hello! Building on our previous tutorials (like sigmoid activation and cost functions), let's tackle **optimization functions** (also called optimizers). These are the "engines" that help neural networks learn by adjusting weights to minimize errors (the cost).
-
-If you're new, no worries—this is beginner-friendly. We'll use simple analogies, math breakdowns, and Python code with TensorFlow/Keras. You can run everything in Google Colab or your Python setup (install with `pip install numpy matplotlib tensorflow scikit-learn`).
-
-Optimizers take the cost function's feedback and update the model's parameters step-by-step. Think of it as navigating a mountain: The cost is your height, and the optimizer finds the fastest path down to the valley (minimum cost).
-
 ---
 
 #### Step 1: What is an Optimization Function? (The Basics)
