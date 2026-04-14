@@ -1,4 +1,4 @@
-# Cost Functions in Neural Networks for Beginners
+# Cost Functions in Neural Networks
 
 ---
 
