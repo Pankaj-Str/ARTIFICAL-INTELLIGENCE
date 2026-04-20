@@ -24,7 +24,7 @@ Here’s exactly what happens:
 We get a vector from the previous layer:  
 
 
-![Uploading Gemini_Generated_Image_9a9ril9a9ril9a9r.png…]()
+
 
 
 
