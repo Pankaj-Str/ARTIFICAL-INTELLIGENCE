@@ -22,7 +22,9 @@ Here’s exactly what happens:
 
 **Step 1:** Input arrives  
 We get a vector from the previous layer:  
-\[ \mathbf{x} = [x_1, x_2, x_3, \dots, x_n] \]
+
+<img width="1973" height="528" alt="Gemini_Generated_Image_nmhpsrnmhpsrnmhp" src="https://github.com/user-attachments/assets/debdb9e4-af7c-42c3-9fe2-853a507d811f" />
+
 
 **Step 2:** Weights and Bias  
 There is a **weight matrix** of size **n × m**.  
