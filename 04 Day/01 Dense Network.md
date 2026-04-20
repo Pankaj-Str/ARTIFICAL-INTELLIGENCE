@@ -23,6 +23,7 @@ Here’s exactly what happens:
 **Step 1:** Input arrives  
 We get a vector from the previous layer:  
 
+<img width="3763" height="1017" alt="Gemini_Generated_Image_9a9ril9a9ril9a9r" src="https://github.com/user-attachments/assets/38698c92-02d4-4321-86ab-58db921be9f1" />
 
 
 **Step 2:** Weights and Bias  
@@ -31,24 +32,14 @@ Each weight tells how important a particular input is for a particular neuron.
 
 **Step 3:** Each neuron calculates its output  
 
+<img width="2623" height="1513" alt="Gemini_Generated_Image_lj6uetlj6uetlj6u" src="https://github.com/user-attachments/assets/e723df41-3e1b-4823-a54b-038fecf574ae" />
 
 
 
 **Step 4:** Activation Function  
-We then apply an activation function (like ReLU, Sigmoid, etc.):
 
-\[
-y_j = f(z_j)
-\]
+<img width="2568" height="1664" alt="Gemini_Generated_Image_g39ce0g39ce0g39c" src="https://github.com/user-attachments/assets/d3fad7a5-715f-49e2-a7ab-e1220268f5a2" />
 
-- ReLU (most common): \( y = \max(0, z) \) → removes negative values
-- This final \( y \) becomes the input for the next layer.
-
-**Matrix form (simple):**
-
-\[
-\mathbf{y} = f(\mathbf{W}^T \mathbf{x} + \mathbf{b})
-\]
 
 This process repeats for every Dense layer until we reach the output layer.
 
