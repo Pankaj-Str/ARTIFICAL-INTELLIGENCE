@@ -23,7 +23,9 @@ Here’s exactly what happens:
 **Step 1:** Input arrives  
 We get a vector from the previous layer:  
 
+
 ![Uploading Gemini_Generated_Image_9a9ril9a9ril9a9r.png…]()
+
 
 
 **Step 2:** Weights and Bias  
@@ -32,7 +34,7 @@ Each weight tells how important a particular input is for a particular neuron.
 
 **Step 3:** Each neuron calculates its output  
 
-![Uploading Gemini_Generated_Image_lj6uetlj6uetlj6u.png…]()
+
 
 
 **Step 4:** Activation Function  
