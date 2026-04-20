@@ -23,7 +23,7 @@ Here’s exactly what happens:
 **Step 1:** Input arrives  
 We get a vector from the previous layer:  
 
-<img width="1973" height="528" alt="Gemini_Generated_Image_nmhpsrnmhpsrnmhp" src="https://github.com/user-attachments/assets/debdb9e4-af7c-42c3-9fe2-853a507d811f" />
+![Uploading Gemini_Generated_Image_9a9ril9a9ril9a9r.png…]()
 
 
 **Step 2:** Weights and Bias  
@@ -31,16 +31,9 @@ There is a **weight matrix** of size **n × m**.
 Each weight tells how important a particular input is for a particular neuron.
 
 **Step 3:** Each neuron calculates its output  
-For every neuron \( j \) in the dense layer, we calculate:
 
-\[
-z_j = \sum_{i=1}^{n} (x_i \times w_{ij}) + b_j
-\]
+![Uploading Gemini_Generated_Image_lj6uetlj6uetlj6u.png…]()
 
-- \( x_i \) = input value
-- \( w_{ij} \) = weight from input i to neuron j
-- \( b_j \) = bias (a small number that helps the neuron adjust)
-- \( z_j \) = weighted sum (raw output)
 
 **Step 4:** Activation Function  
 We then apply an activation function (like ReLU, Sigmoid, etc.):
