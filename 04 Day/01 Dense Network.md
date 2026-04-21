@@ -34,7 +34,8 @@ Here's a close-up view of how dense connections work (plus the full flow of info
 2. **Weights** (w) → numbers the AI learns (like volume knobs).
 3. **Bias** (b) → a little extra number added (helps the neuron "shift" its decision).
 4. **Sum** → multiply inputs by weights and add bias:  
-   \[ z = (w_1 \times x_1) + (w_2 \times x_2) + \dots + b \]
+   <img width="2816" height="1536" alt="Gemini_Generated_Image_1vlcj31vlcj31vlc" src="https://github.com/user-attachments/assets/b274248b-e378-4498-b5ff-53d5dd36e7e4" />
+
 5. **Activation function** → decides if the neuron "fires" (sends signal forward). Common ones:
    - **ReLU** (most popular): turns negative numbers to 0 → simple and fast.
    - **Sigmoid** → squishes output between 0 and 1 (great for yes/no answers).
