@@ -25,6 +25,7 @@ Imagine 3 inputs talking to 4 neurons — that's 12 connections! Every one gets 
 
 Here's a close-up view of how dense connections work (plus the full flow of information):
 
+<img width="2872" height="1472" alt="Gemini_Generated_Image_naj30znaj30znaj3" src="https://github.com/user-attachments/assets/6dbde108-927f-43d7-afc1-d0b34eccaae3" />
 
 
 
@@ -39,6 +40,8 @@ Here's a close-up view of how dense connections work (plus the full flow of info
    - **Sigmoid** → squishes output between 0 and 1 (great for yes/no answers).
 
 Here are the most common activation functions in one easy chart:
+
+<img width="2758" height="1504" alt="Gemini_Generated_Image_r7javfr7javfr7ja" src="https://github.com/user-attachments/assets/37a4ff9c-3357-42ce-a1f8-08554dc6a28e" />
 
 
 
