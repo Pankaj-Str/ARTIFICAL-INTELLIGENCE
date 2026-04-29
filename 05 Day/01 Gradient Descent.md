@@ -1,4 +1,4 @@
-**Gradient Descent explained super simply (like teaching a 5-year-old who likes cookies)**
+**Gradient descent**
 
 Imagine you are blindfolded on a strange hill and you want to get to the **lowest point** (the bottom of the valley) as fast as possible.
 
