@@ -52,7 +52,7 @@ ANN learns in two main steps:
 
 This process repeats many times (called **epochs**) until the network becomes good at its task.
 
-### Practical Example with TensorFlow (Simple English)
+### Practical Example with TensorFlow
 
 We will use the **MNIST dataset** — a very famous beginner example.  
 It contains handwritten digits (0 to 9) as 28x28 gray images. The goal is to teach the ANN to recognize which digit is written.
