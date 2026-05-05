@@ -1128,6 +1128,222 @@ F(x) + W_s x
 ---
 
 
+## Step-by-Step Tutorial: Using ResNet50 for Image Classification
+
+In this tutorial, you will learn how to use **ResNet50** step by step with simple and clear code. We will use **TensorFlow / Keras**.
+
+---
+
+# Step 1: Install Required Libraries
+
+If not installed, run:
+
+```bash
+pip install tensorflow matplotlib numpy
+```
+
+---
+
+# Step 2: Import Libraries
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
+```
+
+---
+
+# Step 3: Load Pretrained ResNet50 Model
+
+```python
+model = ResNet50(weights='imagenet')
+```
+
+Explanation:
+
+* `weights='imagenet'` means the model is already trained on a large dataset
+* You do not need to train from scratch
+
+---
+
+# Step 4: Load an Image
+
+Replace `"cat.jpg"` with your image file.
+
+```python
+img_path = "cat.jpg"
+
+img = image.load_img(img_path, target_size=(224, 224))
+plt.imshow(img)
+plt.axis('off')
+```
+
+Explanation:
+
+* ResNet50 expects input size **224 × 224**
+* Image is resized automatically
+
+---
+
+# Step 5: Convert Image to Array
+
+```python
+img_array = image.img_to_array(img)
+img_array = np.expand_dims(img_array, axis=0)
+```
+
+Explanation:
+
+* Converts image into numerical format
+* Adds batch dimension (required by model)
+
+---
+
+# Step 6: Preprocess the Image
+
+```python
+img_array = preprocess_input(img_array)
+```
+
+Explanation:
+
+* Normalizes pixel values
+* Matches the format used during training
+
+---
+
+# Step 7: Make Prediction
+
+```python
+predictions = model.predict(img_array)
+```
+
+---
+
+# Step 8: Decode Predictions
+
+```python
+decoded = decode_predictions(predictions, top=3)
+
+for i, (imagenetID, label, prob) in enumerate(decoded[0]):
+    print(f"{i+1}. {label} - {prob:.4f}")
+```
+
+Example Output:
+
+```
+1. tabby_cat - 0.92
+2. tiger_cat - 0.05
+3. Egyptian_cat - 0.02
+```
+
+Explanation:
+
+* Shows top 3 predicted classes
+* `prob` is confidence score
+
+---
+
+# Step 9: Complete Code (All Together)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
+
+# Load model
+model = ResNet50(weights='imagenet')
+
+# Load image
+img_path = "cat.jpg"
+img = image.load_img(img_path, target_size=(224, 224))
+
+# Show image
+plt.imshow(img)
+plt.axis('off')
+
+# Convert to array
+img_array = image.img_to_array(img)
+img_array = np.expand_dims(img_array, axis=0)
+
+# Preprocess
+img_array = preprocess_input(img_array)
+
+# Predict
+predictions = model.predict(img_array)
+
+# Decode
+decoded = decode_predictions(predictions, top=3)
+
+# Print results
+for i, (imagenetID, label, prob) in enumerate(decoded[0]):
+    print(f"{i+1}. {label} - {prob:.4f}")
+```
+
+---
+
+# Step 10: Understanding What Happened
+
+1. Image is loaded and resized
+2. Converted into numbers
+3. Preprocessed for the model
+4. Passed through ResNet50
+5. Model extracts features using deep layers
+6. Final layer predicts class probabilities
+
+---
+
+# Optional: Train on Your Own Dataset (Transfer Learning)
+
+```python
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
+
+base_model = ResNet50(weights='imagenet', include_top=False)
+
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dense(2, activation='softmax')(x)
+
+model = Model(inputs=base_model.input, outputs=x)
+
+# Freeze base layers
+for layer in base_model.layers:
+    layer.trainable = False
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+```
+
+Explanation:
+
+* Removes original classifier
+* Adds your custom output layer
+* Useful for problems like:
+
+  * Cat vs Dog
+  * Disease detection
+
+---
+
+# Final Summary
+
+* ResNet50 can be used directly with pretrained weights
+* Requires image preprocessing
+* Gives accurate predictions with minimal code
+* Can be customized using transfer learning
+
+---
+
+If you want next, I can create:
+
+
 
 
 
