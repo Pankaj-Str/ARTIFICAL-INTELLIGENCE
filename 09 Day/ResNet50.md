@@ -350,6 +350,201 @@ Why ResNet50 is useful:
 
 ---
 
+## Understanding Residual Learning
+
+Residual learning is the core idea behind **ResNet**. Instead of forcing a deep network to learn a complete transformation from input to output, it learns only the **difference (residual)** between them.
+
+### Traditional Learning vs Residual Learning
+
+* **Traditional approach:**
+  The network tries to learn a direct mapping
+  ( H(x) )
+
+* **Residual approach:**
+  The network learns a smaller function
+  ( F(x) = H(x) - x )
+
+Then combines it with the original input:
+[
+H(x) = F(x) + x
+]
+
+### Intuition
+
+It is easier to learn **small corrections** than to learn the entire transformation from scratch.
+
+Example idea:
+If the correct output is very similar to the input, the network only needs to adjust slightly instead of rebuilding everything.
+
+---
+
+## Concept of Skip Connections
+
+A **skip connection** (also called a shortcut connection) allows the input to bypass one or more layers and be added directly to the output.
+
+### How it works
+
+1. Input ( x ) goes through some layers → produces ( F(x) )
+2. The original input ( x ) is added directly to ( F(x) )
+3. Final output becomes ( F(x) + x )
+
+This “shortcut” creates an alternative path for information and gradients.
+
+### Why it is important
+
+* Prevents information loss
+* Allows gradients to flow directly backward
+* Makes training deep networks stable
+
+---
+
+## Identity Mapping
+
+**Identity mapping** means passing the input forward **unchanged**.
+
+In ResNet:
+
+* The skip connection carries the input ( x ) directly
+* This acts as an identity function
+
+So even if the main layers fail to learn anything useful:
+[
+Output = x
+]
+
+### Why this is powerful
+
+* Guarantees that deeper layers will not perform worse than shallower ones
+* Makes it easier for the network to learn or “do nothing” when needed
+
+---
+
+## Mathematical Intuition
+
+The core equation of residual learning is:
+
+H(x) = F(x) + x
+
+### What each term means
+
+* ( x ): input
+* ( F(x) ): residual (what the network learns)
+* ( H(x) ): final output
+
+### Why this helps
+
+Instead of learning:
+
+* A complex function ( H(x) )
+
+The network learns:
+
+* A simpler function ( F(x) )
+
+If the optimal mapping is close to identity:
+
+* Then ( F(x) \approx 0 )
+* So ( H(x) \approx x )
+
+This is much easier for optimization.
+
+---
+
+## Why Skip Connections Help Training Deeper Networks
+
+Deep networks face two major issues:
+
+* Vanishing gradients
+* Degradation problem
+
+Skip connections directly address both.
+
+### 1. Better Gradient Flow
+
+During backpropagation:
+
+* Gradients can flow through the shortcut path
+* They do not shrink as much as in long layer chains
+
+Result:
+
+* Early layers learn effectively
+* Training becomes faster and more stable
+
+---
+
+### 2. Avoids Degradation Problem
+
+Without skip connections:
+
+* Adding more layers can reduce accuracy
+
+With skip connections:
+
+* The network can simply pass input forward
+* It will not perform worse than a shallow network
+
+---
+
+### 3. Easier Optimization
+
+Learning ( F(x) ) is simpler than learning ( H(x) )
+
+* Small residuals are easier to adjust
+* Optimization landscape becomes smoother
+
+---
+
+### 4. Feature Reuse
+
+* Earlier features are directly reused
+* Later layers refine instead of rebuild
+
+---
+
+## Visual Explanation of Residual Block
+
+![Image](https://images.openai.com/static-rsc-4/jj5HH4gfaz_Oy8Q8j4nabTYaFTOra3sK077wULSkF5pW2dHW5TcxE6vI67AYfHZyTxYnLHL_onwn0IuTAkYhEeoypdeQgUWGVrhPDZDMvUGNSJxHMp1smY-4OXIUBPv57mxjs7IqcnvN4ww2X8V2WIc-ZMCU2I0MLfwrfXmrkZoSKUa7QJDFUSpZb-6iI5xx?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/IgfhLTNt1ZUk1uMj7SzPgSqSqm5lKcakmMWapVxcTVv6pgp-3D7ge6bRWuqHxpAefpsmtAwo3eL8r8YsQ2Pjbrw74nrK-GfsobY4EdapG3u9NgSWlpGswq878W862jR-5Oh4qG-oUvGymy9Pn4h7OCa9B9jbtZZR360WzSh_EPU1vjufs91qZPeiQHQtVUGP?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/3YS3DjGyf7a55O3kjsMnyM42vk0QcXD_fwMaRRQZD8Sa-gLw8ACJ-_19xix0tuinh4jcsXhktBaZ7h1J_Db8mZmAzu-k9SxxX2R71DYHuGza-tSJhGOnQt6YPocKSjWcrMKcjqCrUfjDxMQtA-if3WsWRw9GNXsfkgeg_lgcTUWClF_OHr6TM62qJY0bahoU?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/lOfVqO9_ApC255VwfyPFJJ4NEUIyFKZY5M3WY2BtLcK56dURjByCfLA8GsyAetILFnZUrAHPsR7WKAB3yg5HiGHOP8lmIX_uU1XCmfSatU4ECeI0PZwCvvlupwu9oieGfsTiDZUoGM1fGCv06K0wtiF8Vj5GZNFRRpm_E9gALMDTC9Z_sIAYbWzekguxxWNu?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/PSspmrGdCIINVgT_4SIumJLV9BuN9953Ny6eyghMYUdEGat09mT7-f6b-NKamOrnE64onAHm66GkQF90UYk5sTfeX1Z3mHyx_5vQ_rjiZqA30LRmBwdgmWTLA0drJPISIfrxHvy1rycqV6kz3SHQV-exzHkCzQCOTNy263nS0C_XeRqRQRrmpHuL48NZteNM?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/C04-9ZrBsfF6MNUQPQe5i4mKLBdHMgOFg5NenlJe04auIeoQXJLcLd2zhjg__UR9gPJfTjqO7yITbV6Du_kjRUFSMrJxTmDisSlX-srYH6mwV0-v2Q75lZzfvP1JXEHiOQWAeyrfcrdi5WHnPUdlh2AO7ba4Yc4s6VznbAgXP50haJhTaIrXRLvQj0ievHWr?purpose=fullsize)
+
+### Step-by-step flow inside a residual block
+
+1. **Input (x)**
+   The original data enters the block
+
+2. **Main Path (F(x))**
+
+   * Convolution layer
+   * Batch Normalization
+   * Activation (ReLU)
+   * Another convolution
+
+3. **Shortcut Path**
+
+   * Direct connection carrying input ( x )
+
+4. **Addition**
+
+   * Combine both paths:
+     [
+     F(x) + x
+     ]
+
+5. **Final Activation**
+
+   * Apply ReLU to the result
+
+---
+
 
 
 
