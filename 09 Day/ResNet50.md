@@ -545,6 +545,307 @@ Learning ( F(x) ) is simpler than learning ( H(x) )
 
 ---
 
+## Architecture of ResNet50
+
+**ResNet50** is built by stacking **residual blocks** in a very organized way. Understanding its architecture becomes easy if you break it into two parts:
+
+1. Overall flow of the network
+2. Detailed layer-by-layer breakdown
+
+---
+
+# 4.1 Overall Structure
+
+![Image](https://images.openai.com/static-rsc-4/i-B0VY6mDkAJTGi5TQBnvKu7Xw2vmBl-nOtHN6xtxhUUxDUlicEWzwJQpz3f3_ha7ByLrpvQzeK-m2VJX6hdd8mEF5bvSJQN9RW-cGVdvAnAc2_EkX6pLxhwZfw0vAuGlKbZXbvIENSwOABIRk65QwVzkFr_FB_7L37WlHj4Cp1pEwvgn3QzmFyaGYhG2cxL?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/OvSG0xYRgwBAIvzLypTudCEdSS-1JITiFYeVIxFy9SWQ_S2U1_6547fD-Vc9DKWmW4p-devjkcSNgytVJP5BGdX8Jg-RV9CDGahsxFxOMRkf-HJvrlB9uIRbTeITtBO2i4Eu8jv1qlQow0fQOqry1KbMKdhALCV-qBUeqhPBFaGl4nGuYOMNxcco0kN_nKXc?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/t1KgXmpY_FqaUbF8ANhhLqYqqMjv0gIJAX4MZDb9OcePgDWrP_O8Nc6iZ2TiDyCh4GD0dk5brASz6_1JWMNaw11GJy0uR4JvedNVS6HegC92kqdHXbrnxe8HIohPfpUvdwNz7EW0bGbuubLd5NrgnaMoaTdiwUTGzK3147K-MwST5EjBLkhD08mjwjQe7xEd?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/2nM1p-B7RxHVwgS2QXjvMBfloe9kJ-vnsG50qLFBCi1eJNTMGU2OmB3DzGrrQxdxEQlCfH5BKr6uKGYdwdty_Cv-51v4j98LwCmkdN0Q7POOLuqC18xA8oeeNtwgexSHkrEYWboc8rxN6vUrgVAX1_qSE8YCKvGdf2Hrzo1wt_lwtONQlHuXNEGCUzdbs5fD?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/0-aZnbQHT0HdK1_PeppdSIma7iRxmw5WgI5oY-MeCph1yOF_1EKmxCHGhRpVnqSTBonPLc225batoyBX_Zel6MN2JuqYs3ivgftctf3ndlxM2wEPe7iLYMkw4qt1q_epg9MTUNmHlJqtdKGHD7u0Q8lDtTBO8bea9ICVMiou1ECJRoP6RjL3jPbozbvMolqW?purpose=fullsize)
+
+### 1. Input Layer
+
+* The model takes an image as input
+* Standard input size: **224 × 224 × 3 (RGB image)**
+
+This is just raw pixel data.
+
+---
+
+### 2. Convolution + MaxPooling
+
+This is the **initial feature extraction stage**
+
+* **7×7 Convolution**
+
+  * Large filter to capture basic patterns
+  * Output feature maps
+
+* **Batch Normalization + ReLU**
+
+  * Normalize values
+  * Introduce non-linearity
+
+* **MaxPooling (3×3)**
+
+  * Reduces spatial size
+  * Keeps important features
+
+Result:
+
+* Image size becomes smaller
+* Important patterns like edges and textures are extracted
+
+---
+
+### 3. 4 Stages of Residual Blocks
+
+This is the **core of ResNet50**
+
+There are 4 main stages:
+
+* Conv2_x
+* Conv3_x
+* Conv4_x
+* Conv5_x
+
+Each stage:
+
+* Contains multiple residual blocks
+* Learns increasingly complex features
+
+Flow of learning:
+
+* Early stage → edges, colors
+* Middle stage → shapes, textures
+* Deep stage → objects
+
+---
+
+### 4. Fully Connected Layer
+
+* After feature extraction, output is flattened
+* Passed to a dense (fully connected) layer
+
+Purpose:
+
+* Combine all learned features into final decision
+
+---
+
+### 5. Output Layer (Softmax)
+
+* Final layer uses **Softmax activation**
+
+Output:
+
+* Probability for each class
+
+Example:
+
+* Cat → 0.92
+* Dog → 0.05
+* Car → 0.03
+
+---
+
+# 4.2 Layer Breakdown (Detailed Structure)
+
+Now let’s break down how those 50 layers are arranged.
+
+---
+
+### Conv1 Layer
+
+* 7×7 Convolution, 64 filters, stride 2
+* Followed by:
+
+  * BatchNorm
+  * ReLU
+  * MaxPooling
+
+Purpose:
+
+* Capture basic visual features
+
+---
+
+### Conv2_x (3 Blocks)
+
+* Contains **3 residual blocks**
+* Output feature size: relatively large spatial resolution
+
+What it learns:
+
+* Simple patterns like edges and corners
+
+---
+
+### Conv3_x (4 Blocks)
+
+* Contains **4 residual blocks**
+* Spatial size reduces, depth increases
+
+What it learns:
+
+* Shapes and textures
+
+---
+
+### Conv4_x (6 Blocks)
+
+* Contains **6 residual blocks**
+* This is the **deepest and most important stage**
+
+What it learns:
+
+* Complex object parts
+
+---
+
+### Conv5_x (3 Blocks)
+
+* Contains **3 residual blocks**
+* Very deep representation
+
+What it learns:
+
+* High-level object understanding
+
+---
+
+### Total Layers Count
+
+* Conv layers + FC layer = **50 layers**
+* That is why it is called **ResNet50**
+
+---
+
+# 5. Types of Blocks in ResNet50
+
+ResNet50 mainly uses two types of residual blocks:
+
+---
+
+## 5.1 Identity Block
+
+![Image](https://images.openai.com/static-rsc-4/LMSAiPf65zu0x5p3ugHDzLBdxBIEv9G3IEFT5C0X0KwOrsvN0mSwuhEUBtw0X7YnP8O4DArCaa4Oh18PfeBvBR5NtTd5YrJd0hJCs7op5tHW9z1ImFnxRhszKD4YP1SWEDlO6vF3xSZjdR3xsYtsZxJsSgQ06HojtG83Qe3tYwtBst5KkPD7lwdDfhHEj0Rt?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/lOfVqO9_ApC255VwfyPFJJ4NEUIyFKZY5M3WY2BtLcK56dURjByCfLA8GsyAetILFnZUrAHPsR7WKAB3yg5HiGHOP8lmIX_uU1XCmfSatU4ECeI0PZwCvvlupwu9oieGfsTiDZUoGM1fGCv06K0wtiF8Vj5GZNFRRpm_E9gALMDTC9Z_sIAYbWzekguxxWNu?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/H22vdb-7tiEVJ_IduM_bk_KEXlwbzpzJ0m3Ma-Le8mQbXmsUkq89NoCA43nDzhnqSIGF1wr0Q9ID0nPs6eiLIkTi2ixMNCNDtP1S0VpIZUrfOj-W-x5Y_TJqa6OJKt_hbMIVSZP5G2a6_zQ90VI1Hoj7KuWr9FBy59bkeRGeCMZs_rC6sRVVL7PXV6Q2iDkj?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/_h0GGb7M1AfY_rZ6U_6Lfd7Tcmok_gPiTyh17P9ki1MquEYgcSRcKpmTY0VwK2L0-8RM5iyd2hpTZg-H_iZdzONi8oAUFd__Q51KMlLe68z_F0bFWG_OYiMLlraLtU3HOE7DdIyT3pXLVpXVk_TK0c8G40yR2SDZtutlSW0O4RfZbIGm6XZ_RiM47w5IwgVm?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/QNNz2SESTzeb96fW5bMSpJ1sMN3nncW3ewFTwdc2wzDcIH3B6mQ8m-vWy9VDlAOIVtq4pskWrvXYR0H830h5bWRm1Snv1d4FY1UXAQP__i2LyufdTY3rmOjmHbBVBLk7dnDxVDkQv5RExdtl89JRUcasyKh50tcW9eAlKFIFcMzkUNrWlK_FM96WPzVHhCSN?purpose=fullsize)
+
+### When it is used
+
+* Input and output dimensions are **the same**
+
+### Structure
+
+* Input → Convolution layers → Output
+* Shortcut path → direct (no change)
+
+### Key point
+
+* Shortcut is just **identity mapping (x)**
+* No convolution is applied in shortcut
+
+### Output
+
+[
+F(x) + x
+]
+
+### Why useful
+
+* Simple and efficient
+* Keeps information intact
+
+---
+
+## 5.2 Convolutional Block
+
+![Image](https://images.openai.com/static-rsc-4/1hNUTee1RgefipUeq4wDZlfpX9fypXnSDjF1H_otpJM2YiQtyx3hltbF2l8n1oDN7wDnmwybZxXA3DCo3NSIno-4MKbv0-UH93ZVQFdEF-yhsaClcxdFbkPS7T5eB2EgUqm59zLMtuWzbSO--yfDuckzZD_axoFUuBbKkXZZFffVD7XeogVQYRiOoSftFvvo?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/iUIkIrXs0mLjaB_soJtCxj9_ltXeUOm7jliUz4oaO1lirdoPInALwQovFqoYT_fcAcOtcXuOHQVgx-vcqtSaG59iG4A6NszYAfuu6xhE49anqHqqiFTJwP6BgvzGpXoB-LztfxzUhAadGRfcl1MJkbRDAmG-Zz01obWDU-xQgy1ITODw_6RkziEPGhTzg2dK?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/5zBPSWHOcdg00epOwAiJi49bb53r_qp2H974JCPaUUabtqAlWiUrppQVsy-koD0BozZxV423IHLqxDYcSqcEfomVSM-XclTVZxnaJiCLCcZt9uTrl_pbObMyClxL7qA09eG186rNMUdi489r0FicMdPTc0fz40-XmCOsxQjb3pwTRln6BtOpjU8Zjn-kgMHh?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/r-HyXVYIcEhoUfWQ_FFr0BTuJF3yb82C9ayYvnPVKtB3tUqRUGzy-8xiCLc-Fzu0j0npD9usvNUHKyNzn5YzSGfQvHumf-je6CQErEvxhp2Q4tNyaVjLKXLg2nM_OZmT6bGkPKngceval7ev4kmWk5lj8GqWDxZNQyxBnod9mCSuyM5MPv52XYgm4MsNi40C?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/0ZzBk7QRXnkRhAJYHMP05onN5U5Ljtp2XI_jSKqiUMYMFzGTmqx__uXXSAUaODauSOo594U412epaeFTiF0fOW86VJPjoK6xB-_j40kkuV-tbwKpT3fE7apOUXtNIVsFdcB5rt_xGD1I1oDKda0WXclP14ZCnZPO3RwsQ_fIrPCKoO2ng7lTvRcjlVzsjAvG?purpose=fullsize)
+
+### When it is used
+
+* Input and output dimensions are **different**
+
+Example:
+
+* Feature map size changes
+* Number of channels increases
+
+### Structure
+
+* Main path: Convolution layers
+* Shortcut path: **1×1 convolution**
+
+### Why convolution in shortcut?
+
+* To match dimensions before addition
+* Ensures shapes are compatible
+
+### Output
+
+[
+F(x) + W_s x
+]
+
+(where ( W_s ) is convolution in shortcut)
+
+---
+
+## Key Difference Between Blocks
+
+| Feature    | Identity Block | Convolutional Block       |
+| ---------- | -------------- | ------------------------- |
+| Dimensions | Same           | Different                 |
+| Shortcut   | Direct         | Convolution               |
+| Complexity | Simple         | Slightly complex          |
+| Usage      | Most blocks    | First block of each stage |
+
+---
+
+## Simple Intuition
+
+* **Identity Block**: “Keep same size, just refine features”
+* **Convolutional Block**: “Change size, learn new representation”
+
+---
+
+## Final Summary
+
+* ResNet50 is built using **stacked residual blocks**
+* Architecture flows as:
+
+  * Input → Conv → Pool → Residual Stages → FC → Softmax
+* 4 main stages:
+
+  * Conv2_x → Conv5_x
+* Two block types:
+
+  * Identity Block (same size)
+  * Convolutional Block (dimension change)
+
+---
+
+
+
 
 
 
