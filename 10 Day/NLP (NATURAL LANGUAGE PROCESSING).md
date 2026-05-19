@@ -147,6 +147,159 @@ print(result)  # [{'label': 'POSITIVE', 'score': 0.999}]
 - Start simple with NLTK → Advance to Transformers/BERT.
 - Practice daily: Analyze WhatsApp chats or news!
 
+-----
+
+### Real Dataset Example (IMDB Movie Reviews Sentiment Analysis)
+
+
+### Sentiment Analysis on IMDB Movie Reviews Dataset
+
+**Why this dataset?**  
+It is one of the most popular NLP benchmark datasets. It contains **50,000 real movie reviews** from IMDB, perfectly balanced:  
+- 25,000 **Positive** reviews (rating ≥ 7/10)  
+- 25,000 **Negative** reviews (rating ≤ 4/10)  
+
+**Dataset Source**:  
+- Original: Stanford AI (Andrew Maas et al., 2011)  
+- Easy CSV version on Kaggle: [IMDB Dataset of 50K Movie Reviews](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews)  
+- Columns: `review` (text) + `sentiment` (positive/negative)
+
+**Real Sample Rows** (actual examples from the dataset style):
+
+| Review (truncated) | Sentiment |
+|--------------------|---------|
+| "One of the best movies I have ever seen. The acting was superb and the story kept me hooked till the end. Highly recommended!" | Positive |
+| "This movie was an absolute waste of time. Poor plot, bad acting, and it felt like it would never end. Don't watch it." | Negative |
+| "A masterpiece! Brilliant direction, emotional depth, and unforgettable characters. I watched it twice in one week." | Positive |
+| "Terrible script and annoying characters. I regret spending money on this. Save your time and skip it." | Negative |
+
+
+### Step-by-Step Implementation
+
+#### Step 1: Load and Explore the Dataset
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the data (download CSV from Kaggle)
+df = pd.read_csv('IMDB Dataset.csv')   # Shape: (50000, 2)
+
+print(df.shape)
+print(df['sentiment'].value_counts())   # Balanced: 25000 positive, 25000 negative
+
+# Visualize
+sns.countplot(x='sentiment', data=df)
+plt.title('Distribution of Sentiments')
+plt.show()
+
+df.head()
+```
+
+#### Step 2: Preprocessing (Apply everything you taught earlier)
+```python
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+lemmatizer = WordNetLemmatizer()
+stop_words = set(stopwords.words('english'))
+
+def preprocess(text):
+    text = text.lower()                     # Lowercase
+    text = re.sub(r'[^a-z\s]', '', text)    # Remove punctuation & numbers
+    words = text.split()
+    words = [lemmatizer.lemmatize(w) for w in words if w not in stop_words]
+    return ' '.join(words)
+
+# Apply to dataset (this may take 1-2 minutes)
+df['clean_review'] = df['review'].apply(preprocess)
+
+print("Original:", df['review'][0][:200])
+print("Cleaned:", df['clean_review'][0][:200])
+```
+
+#### Step 3: Feature Extraction (Bag of Words / TF-IDF)
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+
+X = df['clean_review']
+y = df['sentiment'].map({'positive': 1, 'negative': 0})   # Convert to numbers
+
+vectorizer = TfidfVectorizer(max_features=5000)   # Limit to top 5000 words
+X_tfidf = vectorizer.fit_transform(X)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X_tfidf, y, test_size=0.2, random_state=42)
+```
+
+#### Step 4: Train a Simple Model (Logistic Regression – Great baseline!)
+```python
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))   # Usually ~88-90% with TF-IDF
+print(classification_report(y_test, y_pred))
+```
+
+**Expected Output (Typical results)**:  
+Accuracy: **0.89** (89%)  
+Great precision & recall for both classes.
+
+#### Step 5: Test on New Reviews (Real-time Demo in Lecture)
+```python
+def predict_sentiment(review):
+    clean = preprocess(review)
+    vec = vectorizer.transform([clean])
+    pred = model.predict(vec)[0]
+    return "Positive" if pred == 1 else "Negative"
+
+# Live examples
+print(predict_sentiment("The cinematography was stunning and the story moved me to tears. Best film of the year!"))
+print(predict_sentiment("Boring from start to finish. Waste of 2 hours of my life."))
+```
+
+#### Step 6: Advanced – Try Transformers (Hugging Face)
+For higher accuracy (~94-96%):
+```python
+from transformers import pipeline
+sentiment_pipeline = pipeline("sentiment-analysis")
+
+result = sentiment_pipeline("I loved this movie so much!")
+print(result)   # [{'label': 'POSITIVE', 'score': 0.999}]
+```
+
+### Project Extension Ideas
+1. **Improve Accuracy**: Try Naive Bayes, Random Forest, or LSTM.
+2. **Word Clouds**: Show most common words in positive vs negative reviews.
+3. **Error Analysis**: Find reviews where model fails (sarcasm cases).
+4. **Multilingual**: Add Hindi movie reviews and compare.
+5. **Deploy**: Make a Gradio web app where anyone can paste a review.
+
+**Performance Comparison Table** (Typical student results):
+
+| Model              | Accuracy | Training Time |
+|--------------------|----------|---------------|
+| TF-IDF + Logistic  | ~89%    | Fast         |
+| Naive Bayes        | ~85%    | Very Fast    |
+| BERT (fine-tuned)  | ~95%    | Slow (needs GPU) |
+
+**Challenges Students Will Face**:
+- Long reviews → Truncate or use padding.
+- Class imbalance if they pick another dataset.
+- Overfitting on common words.
+
 
 
 
