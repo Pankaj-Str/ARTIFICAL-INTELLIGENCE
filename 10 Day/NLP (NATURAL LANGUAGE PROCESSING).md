@@ -22,8 +22,6 @@ NLP powers everyday tools:
 - **Content Creation**: Tools like Jasper generate marketing copy.
 - **Voice-to-Text & Autocorrect**: On your phone.
 
-**Lecture Tip**: Ask students – "Which app do you use daily that uses NLP?"
-
 ### 3. Core Steps in NLP Pipeline
 NLP follows a pipeline: Raw text → Clean → Analyze → Model → Output.
 
