@@ -10,6 +10,14 @@
 
 **Why is it hard?** Human language is ambiguous, full of slang, sarcasm, grammar rules, and context. "Time flies like an arrow" can mean different things!
 
+---
+
+<img width="1672" height="941" alt="NLP 01" src="https://github.com/user-attachments/assets/f42344f5-6906-4fb1-8607-cd518326428d" />
+
+
+---
+
+
 ### 2. Real-World Applications of NLP (2026 Examples)
 NLP powers everyday tools:
 - **Virtual Assistants**: Siri, Alexa, Google Assistant – understand voice commands.
@@ -21,6 +29,13 @@ NLP powers everyday tools:
 - **Healthcare**: Extract symptoms from doctor notes.
 - **Content Creation**: Tools like Jasper generate marketing copy.
 - **Voice-to-Text & Autocorrect**: On your phone.
+
+---
+
+<img width="1536" height="1024" alt="NPL 02" src="https://github.com/user-attachments/assets/fda1edcd-344d-4960-83cb-9eadb0a7cc87" />
+
+
+---
 
 ### 3. Core Steps in NLP Pipeline
 NLP follows a pipeline: Raw text → Clean → Analyze → Model → Output.
