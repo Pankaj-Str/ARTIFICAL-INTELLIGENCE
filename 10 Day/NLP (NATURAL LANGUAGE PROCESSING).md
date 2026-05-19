@@ -54,6 +54,9 @@ Text: "The cats are playing happily in the garden!"
 
 After preprocessing: ["cat", "play", "happy", "garden"]
 
+<img width="1536" height="1024" alt="NLP 03" src="https://github.com/user-attachments/assets/27d1bfbf-42f2-465f-8e80-65aedbe21533" />
+
+
 #### Step 2: Basic Linguistic Tasks
 - **Part-of-Speech (POS) Tagging**: Label words as noun, verb, adjective, etc.
   - Example: "The (DET) quick (ADJ) brown (ADJ) fox (NOUN) jumps (VERB)."
