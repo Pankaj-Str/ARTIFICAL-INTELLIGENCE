@@ -1,38 +1,112 @@
+### 6. Textract
 
-### Example: Read Text from an Image Using Python
+Extracts text from many file types (images, PDFs, DOCX, PPTX, etc.).
+
+```bash
+pip install textract
+```
 
 ```python
-# Import necessary libraries
-import cv2
-import pytesseract
+import textract
 
-# Ensure Tesseract-OCR is installed on your system and its path is set correctly
-# Example for Windows: pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-# Load the image
-image_path = 'example_image.jpg'  # Replace with your image file path
-image = cv2.imread(image_path)
-
-# Convert the image to grayscale (optional, improves OCR accuracy)
-gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-# Use pytesseract to extract text from the image
-extracted_text = pytesseract.image_to_string(gray_image)
-
-# Print the extracted text
-print("Extracted Text:")
-print(extracted_text)
+text = textract.process("image.png")
+print(text.decode("utf-8"))
 ```
 
-### Explanation:
-1. **Image Loading**: The image is loaded into memory using OpenCV.
-2. **Grayscale Conversion**: Converting the image to grayscale can enhance text recognition accuracy.
-3. **Text Extraction**: The `image_to_string` function of `pytesseract` extracts text from the image.
+---
 
-Make sure to install the required libraries:
+### 7. RapidOCR
+
+Lightweight and fast OCR based on ONNX Runtime.
+
 ```bash
-pip install pytesseract opencv-python
+pip install rapidocr-onnxruntime
 ```
 
-Additionally, install Tesseract-OCR on your system. Instructions can be found [here](https://github.com/tesseract-ocr/tesseract).
+```python
+from rapidocr_onnxruntime import RapidOCR
 
+engine = RapidOCR()
+result, _ = engine("image.png")
+
+for item in result:
+    print(item[1])
+```
+
+---
+
+### 8. DocTR
+
+Deep-learning OCR library from Mindee.
+
+```bash
+pip install python-doctr
+```
+
+```python
+from doctr.io import DocumentFile
+from doctr.models import ocr_predictor
+
+doc = DocumentFile.from_images("image.png")
+model = ocr_predictor(pretrained=True)
+
+result = model(doc)
+print(result.render())
+```
+
+---
+
+### 9. Kraken
+
+Popular for historical documents and handwritten text.
+
+```bash
+pip install kraken
+```
+
+Example:
+
+```bash
+kraken -i image.png output.txt binarize segment ocr
+```
+
+---
+
+### 10. Surya OCR
+
+Modern OCR library that performs well on multilingual documents.
+
+```bash
+pip install surya-ocr
+```
+
+```python
+from surya.ocr import run_ocr
+```
+
+---
+
+### 11. Cloud OCR APIs
+
+If you're okay using external services:
+
+* Google Vision API
+* Amazon Textract
+* Microsoft Azure AI Vision
+* OpenAI vision models (image understanding)
+
+These usually provide higher accuracy for complex documents, tables, receipts, and handwritten content.
+
+### Best Choice by Use Case
+
+| Use Case            | Recommended Library                          |
+| ------------------- | -------------------------------------------- |
+| Simple OCR          | EasyOCR                                      |
+| Highest Accuracy    | PaddleOCR                                    |
+| Handwritten Notes   | TrOCR, Kraken                                |
+| Documents & Forms   | DocTR, PaddleOCR                             |
+| PDFs                | OCRmyPDF                                     |
+| Fast Local OCR      | RapidOCR                                     |
+| Enterprise Projects | Google Vision, Amazon Textract, Azure Vision |
+
+For a modern Python project in 2026, **PaddleOCR**, **DocTR**, and **RapidOCR** are among the strongest open-source options.
